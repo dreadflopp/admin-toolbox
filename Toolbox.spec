@@ -2,20 +2,24 @@
 # PyInstaller spec for Toolbox (PySide6 desktop app)
 # Build: pyinstaller Toolbox.spec
 
+from PyInstaller.utils.hooks import collect_all
+
+pyside6_datas, pyside6_binaries, pyside6_hiddenimports = collect_all('PySide6')
+
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[],
+    binaries=pyside6_binaries,
     datas=[
         ('map_template_google.html', '.'),
         ('config.example.json', '.'),
         ('icons', 'icons'),
-    ],
+    ] + pyside6_datas,
     hiddenimports=[
         'PySide6.QtWebEngineWidgets',
         'PySide6.QtWebEngineCore',
         'PySide6.QtSvg',
-    ],
+    ] + pyside6_hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

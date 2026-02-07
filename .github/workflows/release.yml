@@ -21,7 +21,7 @@ jobs:
           pip install pyinstaller
 
       - name: Build exe
-        run: pyinstaller --noconfirm --collect-all PySide6 Toolbox.spec
+        run: pyinstaller --noconfirm Toolbox.spec
 
       - name: Create zip artifact
         run: |
