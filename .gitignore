@@ -4,6 +4,11 @@ config.json
 # Geocoding cache (address -> lat/lng only)
 geocache.db
 
+# PyInstaller
+dist/
+build/
+*.spec.log
+
 # Python
 __pycache__/
 *.py[cod]
