@@ -3,7 +3,28 @@ Application configuration and styles for the Toolbox desktop app.
 Provides AppConfig for paths/settings and Styles for Windows 11 Fluent Design.
 """
 
+import sys
 from pathlib import Path
+
+
+def _frozen() -> bool:
+    """True when running as PyInstaller exe."""
+    return getattr(sys, "frozen", False)
+
+
+def _bundle_dir() -> Path:
+    """Directory for bundled resources (map template, etc). When frozen, use PyInstaller's extract dir."""
+    if _frozen():
+        return Path(sys._MEIPASS)
+    return Path(__file__).parent
+
+
+def _exe_dir() -> Path:
+    """Directory containing the exe (when frozen) or the project (when running from source).
+    Used for config.json and geocache.db so they always live next to the exe."""
+    if _frozen():
+        return Path(sys.executable).parent
+    return Path(__file__).parent
 
 
 # =============================================================================
@@ -50,9 +71,9 @@ class AppConfig:
 
     # Paths
     PROJECT_DIR = Path(__file__).parent
-    CONFIG_JSON = PROJECT_DIR / "config.json"
-    MAP_TEMPLATE_GOOGLE = PROJECT_DIR / "map_template_google.html"
-    GEOCACHE_DB = PROJECT_DIR / "geocache.db"
+    CONFIG_JSON = _exe_dir() / "config.json"
+    MAP_TEMPLATE_GOOGLE = _bundle_dir() / "map_template_google.html"
+    GEOCACHE_DB = _exe_dir() / "geocache.db"  # always next to exe (portable)
 
 
 # =============================================================================
