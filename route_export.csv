@@ -1,0 +1,288 @@
+﻿Starttid,Sluttid,Namn,Adress,Slinga,Besökstyp,Insatser,Sign.
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Blå dag 1 -Insulin,UPPSTART,,Estifanos T
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Blå dag 2,UPPSTART,,Kenneth Yugb
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Blå dag 3,UPPSTART,,tsedale
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Rosa dag 1,UPPSTART,,Anna Laestad
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Rosa dag 2,UPPSTART,,Marielle Hen
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Rosa dag 3,UPPSTART,,Mohamed Osma
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Rosa dag 4,UPPSTART,,Amra
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Grön dag 1,UPPSTART,,Ingrid Pino
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Grön dag 2,UPPSTART,,SahraWisemsa
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Blå dag 4,UPPSTART,,Malak Shaban
+2026-02-09 07:00:00,2026-02-09 07:30:00,,,Blå dag 5,UPPSTART,,Sahra Mohamm
+2026-02-09 07:33:00,2026-02-09 07:53:00,Nusret Cocalic,"Länkharvsgatan 100 Lgh 1105, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,"HS Medicin, Morgonbesök",Marielle Hen
+2026-02-09 07:34:00,2026-02-09 07:54:00,Kahsay Haile Ghide,"Fjäderharvsgatan 46 Lgh 1101, 42466, ANGERED",Rosa dag 4,ÄO Hemtjänst,"DUBBELBEMANNING 1, Morgonbesök",Anna Laestad
+2026-02-09 07:34:00,2026-02-09 07:54:00,Kahsay Haile Ghide,"Fjäderharvsgatan 46 Lgh 1101, 42466, ANGERED",Rosa dag 3,ÄO Hemtjänst,"DUBBELBEMANNING 1, HS Insulin, HS Medicin, HS P-Glukos, Morgonbesök",Amra
+2026-02-09 07:37:00,2026-02-09 07:52:00,Helmut Wilhelm Emmerich,"Titteridammshöjden 32, 42468, ANGERED",Rosa dag 3,Hälso och sjukvårdsbeställning,"HS Insulin, HS Medicin",Mohamed Osma
+2026-02-09 07:38:00,2026-02-09 07:53:00,Xhavit Aziri,"FJÄLLVERONIKAN 4 LGH 1101, 42448, ANGERED",Blå dag 1 -Insulin,Hälso och sjukvårdsbeställning,"HS Insulin, HS Medicin, HS P-Glukos",Estifanos T
+2026-02-09 07:39:00,2026-02-09 08:09:00,KARIN Anna Lena Lundell Olausson,"Kryddkrassegatan 30, 42453, ANGERED",Grön dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Morgonbesök",Ingrid Pino
+2026-02-09 07:41:00,2026-02-09 08:11:00,KARIN Anna Lena Lundell Olausson,"Kryddkrassegatan 30, 42453, ANGERED",Grön dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Morgonbesök",SahraWisemsa
+2026-02-09 07:42:00,2026-02-09 08:42:00,BERIT Ingegärd Charlotta Nilsson,"Fjällsippan 6 Lgh 1201, 42448, ANGERED",Blå dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Morgonbesök",Kenneth Yugb
+2026-02-09 07:42:00,2026-02-09 08:42:00,BERIT Ingegärd Charlotta Nilsson,"Fjällsippan 6 Lgh 1201, 42448, ANGERED",Blå dag 3,ÄO Hemtjänst,"DUBBELBEMANNING 2, Morgonbesök",tsedale
+2026-02-09 07:44:00,2026-02-09 08:34:00,ROSIE Louise Jönsson,"Fjällhavren 8 Lgh 1501, 42449, ANGERED",Blå dag 5,ÄO Hemtjänst,"DUBBELBEMANNING 2, Morgonbesök",Sahra Mohamm
+2026-02-09 07:45:00,2026-02-09 08:35:00,ROSIE Louise Jönsson,"Fjällhavren 8 Lgh 1501, 42449, ANGERED",Blå dag 4,ÄO Hemtjänst,"DUBBELBEMANNING 1, Morgonbesök",Malak Shaban
+2026-02-09 07:57:00,2026-02-09 08:12:00,Ensi Matias Puranen,"Länkharvsgatan 22 Lgh 1001, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,"HS Medicin, Morgonbesök",Marielle Hen
+2026-02-09 07:58:00,2026-02-09 08:08:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Morgonbesök",Amra
+2026-02-09 07:58:00,2026-02-09 08:13:00,DAGMAR Louise Hjelm,"Trädgårdsgärdet 60, 42468, ANGERED",Rosa dag 3,ÄO Hemtjänst,"HS Insulin, Tillsyn",Mohamed Osma
+2026-02-09 07:58:00,2026-02-09 08:33:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Morgonbesök",Anna Laestad
+2026-02-09 07:59:00,2026-02-09 08:14:00,AWAZ Abdulrahman,"Fjällgrönan 10 Lgh 1101, 42449, ANGERED",Blå dag 1 -Insulin,Hälso och sjukvårdsbeställning,"HS Insulin, HS Medicin",Estifanos T
+2026-02-09 08:11:00,2026-02-09 08:21:00,Rade Vuleta,"Länkharvsgatan 62 Lgh 1103, 42466, ANGERED",Rosa dag 2,Hälso och sjukvårdsbeställning,HS Medicin,Amra
+2026-02-09 08:14:00,2026-02-09 08:39:00,Ingalill Olsson Cedås,"Kryddpeppargatan 49, 42453, ANGERED",Grön dag 1,ÄO Hemtjänst,Morgonbesök,Ingrid Pino
+2026-02-09 08:16:00,2026-02-09 09:23:00,INGRID Margareta Larsson,"Fjäderharvsgatan 81 Lgh 1003, 42466, ANGERED",Rosa dag 1,FH Hemtjänst,"DUBBELBEMANNING 1, Dusch, HS Insulin, HS Medicin, HS P-Glukos, Morgonbesök",Marielle Hen
+2026-02-09 08:18:00,2026-02-09 08:43:00,Jörgen Einar Sommerlöf,"Kryddpeppargatan 1, 42453, ANGERED",Grön dag 2,ÄO Hemtjänst,"HS Medicin, Morgonbesök",SahraWisemsa
+2026-02-09 08:19:00,2026-02-09 08:33:00,Bert TOMMY Antonsson,"Idtjärnsgatan 28, 42450, ANGERED",Blå dag 1 -Insulin,ÄO Hemtjänst,"HS Medicin, HS P-Glukos, Morgonbesök",Estifanos T
+2026-02-09 08:19:00,2026-02-09 09:04:00,INGRID Margareta Larsson,"Fjäderharvsgatan 81 Lgh 1003, 42466, ANGERED",Rosa dag 2,FH Hemtjänst,"DUBBELBEMANNING 2, Dusch, Morgonbesök",Mohamed Osma
+2026-02-09 08:25:00,2026-02-09 08:30:00,PENTTI Olavi Ekman,"Länkharvsgatan 2 Lgh 1001, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,Morgonbesök,Amra
+2026-02-09 08:38:00,2026-02-09 08:48:00,Ayaan Hared Mahamud,"FJÄLLKÅPAN 4 LGH 1302, 42449, ANGERED",Blå dag 4,Hälso och sjukvårdsbeställning,HS Medicin,Malak Shaban
+2026-02-09 08:38:00,2026-02-09 08:53:00,Gertie Marie-Louise Andersson,"Fjällbruden 160, 42450, ANGERED",Blå dag 1 -Insulin,Hälso och sjukvårdsbeställning,"HS Insulin, HS Medicin",Estifanos T
+2026-02-09 08:38:00,2026-02-09 08:53:00,ELLINOR Julia Oline Port,"Länkharvsgatan 100 Lgh 1006, 42466, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 2, Förmiddagsbesök",Anna Laestad
+2026-02-09 08:38:00,2026-02-09 09:18:00,ELLINOR Julia Oline Port,"Länkharvsgatan 100 Lgh 1006, 42466, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 1, Förmiddagsbesök, HS Insulin, HS Medicin",Amra
+2026-02-09 08:42:00,2026-02-09 09:02:00,Suhra Arapovic,"Fjällbinkan 7 Lgh 1201, 42449, ANGERED",Blå dag 5,FH Hemtjänst,Morgonbesök,Sahra Mohamm
+2026-02-09 08:45:00,2026-02-09 08:55:00,Kjell Lennart Andersson,"Senapsgatan 13 Lgh 1203, 42443, GÖTEBORG",Grön dag 1,ÄO Hemtjänst,"HS Medicin, Morgonbesök",Ingrid Pino
+2026-02-09 08:45:00,2026-02-09 08:55:00,Karin VERONICA Törnblom,"Fjällviolen 4 Lgh 1101, 42448, ANGERED",Blå dag 3,Hälso och sjukvårdsbeställning,HS Medicin,tsedale
+2026-02-09 08:46:00,2026-02-09 08:56:00,JEAN Georg Engström,"Fjällsyran 6 Lgh 1402, 42448, ANGERED",Blå dag 2,Hälso och sjukvårdsbeställning,HS Medicin,Kenneth Yugb
+2026-02-09 08:48:00,2026-02-09 08:53:00,Eija Marjaana Nieminen,"Kryddväxtgatan 12, 42453, ANGERED",Grön dag 2,ÄO Hemtjänst,Morgonbesök,SahraWisemsa
+2026-02-09 08:53:00,2026-02-09 09:03:00,Boris Bohun,"FJÄLLKÅPAN 10 LGH 1101, 42449, ANGERED",Blå dag 4,Hälso och sjukvårdsbeställning,HS Medicin,Malak Shaban
+2026-02-09 08:57:00,2026-02-09 09:27:00,Ulla Monica Wesström,"Fjällbruden 218, 42450, ANGERED",Blå dag 1 -Insulin,ÄO Hemtjänst,"HS Medicin, Morgonbesök",Estifanos T
+2026-02-09 08:58:00,2026-02-09 09:23:00,Björn Erik Pedersen,"Fjällviolen 7 Lgh 1102, 42448, ANGERED",Blå dag 3,ÄO Hemtjänst,"HS Medicin, Morgonbesök",tsedale
+2026-02-09 08:58:00,2026-02-09 09:33:00,LENA Gunbritt Versén,"Senapsgatan 15 Lgh 1303, 42443, ANGERED",Grön dag 2,ÄO Hemtjänst,"HS Insulin, HS Medicin, HS P-Glukos, Morgonbesök",SahraWisemsa
+2026-02-09 09:00:00,2026-02-09 09:02:00,Jan-Pether Näslund,"Fjällveronikan 1 Lgh 1401, 42448, ANGERED",Blå dag 2,FH Ringtillsyn,Ringtillsyn,Kenneth Yugb
+2026-02-09 09:01:00,2026-02-09 09:26:00,Edy Mulyono,"Fänkålsgatan 13, 42443, ANGERED",Grön dag 1,ÄO Hemtjänst,"HS Medicin, Morgonbesök",Ingrid Pino
+2026-02-09 09:08:00,2026-02-09 09:33:00,Kyllikki ANETTE Pikerpöld,"Fjällnejlikan 6 Lgh 1402, 42448, ANGERED",Blå dag 2,FH Hemtjänst,"HS Medicin, Morgonbesök, Sophantering",Kenneth Yugb
+2026-02-09 09:08:00,2026-02-09 09:48:00,Siv ELISABETH Nilsson,"Fjällhavren 3 Lgh 1103, 42449, ANGERED",Blå dag 4,FH Hemtjänst,"DUBBELBEMANNING 1, Morgonbesök",Malak Shaban
+2026-02-09 09:11:00,2026-02-09 09:21:00,Siv ELISABETH Nilsson,"Fjällhavren 3 Lgh 1103, 42449, ANGERED",Blå dag 5,FH Hemtjänst,"DUBBELBEMANNING 2, Morgonbesök",Sahra Mohamm
+2026-02-09 09:14:00,2026-02-09 09:34:00,Inger MARGRETH Heirås,"Tangovägen 27, 42454, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 2, Morgonbesök",Samsam Gadud
+2026-02-09 09:14:00,2026-02-09 09:44:00,Inger MARGRETH Heirås,"Tangovägen 27, 42454, ANGERED",Rosa dag 4,ÄO Hemtjänst,"DUBBELBEMANNING 1, Morgonbesök",Mohamed Osma
+2026-02-09 09:20:00,2026-02-09 09:50:00,Lars-Erik Wester,"Fjäderharvsgatan 51 Lgh 1303, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, HS Medicin, Morgonbesök",Anna Laestad
+2026-02-09 09:21:00,2026-02-09 09:51:00,Lars-Erik Wester,"Fjäderharvsgatan 51 Lgh 1303, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Morgonbesök",Amra
+2026-02-09 09:25:00,2026-02-09 09:45:00,Muhamed Josof Ali,"Fjällviolen 7 Lgh 1502, 42448, ANGERED",Blå dag 3,FH Hemtjänst,Morgonbesök,tsedale
+2026-02-09 09:29:00,2026-02-09 09:59:00,Ulla Eva Margareta Karlsson,"Gunnaredsterrassen 16, 42466, ANGERED",Rosa dag 4,ÄO Hemtjänst,Morgonbesök,Marielle Hen
+2026-02-09 09:30:00,2026-02-09 10:10:00,YOHANES Mesele Demese,"Fjällkåpan 8 Lgh 1001, 42449, ANGERED",Blå dag 3,FH Hemtjänst,Morgonbesök,Sahra Mohamm
+2026-02-09 09:31:00,2026-02-09 09:46:00,EVA Katarina Elisabeth Carlsdotter Fägerskjöld,"Fjällbruden 44, 42450, ANGERED",Blå dag 1 -Insulin,ÄO Hemtjänst,Morgonbesök,Estifanos T
+2026-02-09 09:34:00,2026-02-09 09:54:00,Agripina NEDDA Barbosa Suarez,"Kummingatan 76 Lgh 1201, 42443, ANGERED",Grön dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Morgonbesök",Ingrid Pino
+2026-02-09 09:36:00,2026-02-09 09:51:00,PIA Kerstin Iversen,"Fjällveronikan 3 Lgh 1302, 42448, ANGERED",Blå dag 2,ÄO Hemtjänst,"HS Medicin, Morgonbesök",Kenneth Yugb
+2026-02-09 09:38:00,2026-02-09 10:18:00,Agripina NEDDA Barbosa Suarez,"Kummingatan 76 Lgh 1201, 42443, ANGERED",Grön dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Morgonbesök",SahraWisemsa
+2026-02-09 09:48:00,2026-02-09 10:31:00,Arian Majidi,"Fjällbruden 4, 42450, ANGERED",Blå dag 1 -Insulin,FH Hemtjänst psyk,"Dusch, Tillsyn",Estifanos T
+2026-02-09 09:51:00,2026-02-09 09:56:00,Siv ELISABETH Nilsson,"Fjällhavren 3 Lgh 1103, 42449, ANGERED",Blå dag 4,FH Hemtjänst,"DUBBELBEMANNING 1, Tillsyn",Malak Shaban
+2026-02-09 09:53:00,2026-02-09 10:13:00,LILIAN Gunnel Margareta Johansson,"Trädgårdsgärdet 22 Lgh 1101, 42468, ANGERED",Rosa dag 3,ÄO Hemtjänst,"HS Medicin, Morgonbesök, Sophantering",Mohamed Osma
+2026-02-09 09:55:00,2026-02-09 10:35:00,Badria Nor Mohammed,"Fjäderharvsgatan 46, 42466, ANGERED",Rosa dag 3,ÄO Hemtjänst,"DUBBELBEMANNING 1, HS Insulin, HS Medicin, HS P-Glukos, Morgonbesök",Anna Laestad
+2026-02-09 09:55:00,2026-02-09 10:35:00,Badria Nor Mohammed,"Fjäderharvsgatan 46, 42466, ANGERED",Rosa dag 4,ÄO Hemtjänst,DUBBELBEMANNING 2,Amra
+2026-02-09 09:56:00,2026-02-09 10:16:00,Heber Marquez Barbosa,"Kummingatan 76 Lgh 1201, 42443, ANGERED",Grön dag 1,FH Hemtjänst psyk,Morgonbesök,Ingrid Pino
+2026-02-09 09:56:00,2026-02-09 10:21:00,Nils STURE Lennart Hedlund,"Fjällviolen 8 Lgh 1001, 42448, ANGERED",Blå dag 3,ÄO Hemtjänst,"Morgonbesök, Sophantering",tsedale
+2026-02-09 09:57:00,2026-02-09 10:17:00,ANN-BRITT Lillemor Udd,"Fjällveronikan 5 Lgh 1101, 42448, ANGERED",Blå dag 2,ÄO Hemtjänst,Morgonbesök,Kenneth Yugb
+2026-02-09 10:03:00,2026-02-09 11:10:00,Karin Lisette Russo,"Gunnaredsterrassen 8, 42466, ANGERED",Rosa dag 4,ÄO Hemtjänst,"Dusch, Morgonbesök",Marielle Hen
+2026-02-09 10:04:00,2026-02-09 10:29:00,ROSIE Louise Jönsson,"Fjällhavren 8 Lgh 1501, 42449, ANGERED",Blå dag 4,ÄO Hemtjänst,"DUBBELBEMANNING 2, Förmiddagsbesök",Malak Shaban
+2026-02-09 10:12:00,2026-02-09 10:37:00,ROSIE Louise Jönsson,"Fjällhavren 8 Lgh 1501, 42449, ANGERED",Blå dag 5,ÄO Hemtjänst,"DUBBELBEMANNING 1, Förmiddagsbesök",Sahra Mohamm
+2026-02-09 10:17:00,2026-02-09 10:37:00,Ulla Doris Linnéa Johansson,"Trädgårdsgärdet 98 Lgh 1403, 42468, ANGERED",Rosa dag 3,ÄO Hemtjänst,Morgonbesök,Mohamed Osma
+2026-02-09 10:22:00,2026-02-09 10:37:00,ANN-MARI Cecilia Lord,"Kummingatan 100 Lgh 1001, 42443, ANGERED",Grön dag 1,ÄO Hemtjänst,"Morgonbesök, Sophantering",Ingrid Pino
+2026-02-09 10:22:00,2026-02-09 10:39:00,ANNA-KLARA Elisabet Johansson,"Fjällnejlikan 3 Lgh 1401, 42448, ANGERED",Blå dag 2,ÄO Hemtjänst,Stöd i hemmet,Kenneth Yugb
+2026-02-09 10:26:00,2026-02-09 10:41:00,Björn Erik Pedersen,"Fjällviolen 7 Lgh 1102, 42448, ANGERED",Blå dag 3,ÄO Hemtjänst,Förmiddagsbesök,tsedale
+2026-02-09 10:35:00,2026-02-09 10:55:00,HARRY Lars-Göran Svensson,"Fjällgrönan 9 Lgh 1301, 42449, ANGERED",Blå dag 1 -Insulin,ÄO Hemtjänst,"Morgonbesök, Sophantering",Estifanos T
+2026-02-09 10:39:00,2026-02-09 10:49:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Förmiddagsbesök",Anna Laestad
+2026-02-09 10:39:00,2026-02-09 10:59:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Förmiddagsbesök",Amra
+2026-02-09 10:42:00,2026-02-09 10:52:00,Stig Arne Oskarsson,"Senapsgatan 1 Lgh 1301, 42443, ANGERED",Grön dag 1,ÄO Hemtjänst,"Morgonbesök, Sophantering",Ingrid Pino
+2026-02-09 10:42:00,2026-02-09 10:54:00,ULLA Anita Andersson,"Rappedalsvägen 9 D, 42468, ANGERED",Rosa dag 3,ÄO Hemtjänst,Morgonbesök,Mohamed Osma
+2026-02-09 10:45:00,2026-02-09 11:25:00,,,Blå dag 4,RAST + 10 adm,,Malak Shaban
+2026-02-09 10:48:00,2026-02-09 11:28:00,,,Blå dag 5,RAST + 10 adm,,Sahra Mohamm
+2026-02-09 10:49:00,2026-02-09 11:29:00,,,Blå dag 3,RAST + 10 adm,,tsedale
+2026-02-09 10:50:00,2026-02-09 11:30:00,,,Blå dag 2,RAST + 10 adm,,Kenneth Yugb
+2026-02-09 10:52:00,2026-02-09 11:32:00,,,Grön dag 2,RAST + 10 adm,,SahraWisemsa
+2026-02-09 10:56:00,2026-02-09 11:16:00,MARIA Wictoria Ljung,"Fjäderharvsgatan 7, 42466, ANGERED",Rosa dag 2,FH Hemtjänst,"DUBBELBEMANNING 2, Förmiddagsbesök",Anna Laestad
+2026-02-09 10:58:00,2026-02-09 11:10:00,Sui Chong Chi,"Länkharvsgatan 90, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,Morgonbesök,Mohamed Osma
+2026-02-09 11:01:00,2026-02-09 11:41:00,,,Grön dag 1,RAST + 10 adm,,Ingrid Pino
+2026-02-09 11:03:00,2026-02-09 11:23:00,MARIA Wictoria Ljung,"Fjäderharvsgatan 7, 42466, ANGERED",Rosa dag 1,FH Hemtjänst,"DUBBELBEMANNING 1, Förmiddagsbesök",Amra
+2026-02-09 11:04:00,2026-02-09 11:44:00,,,Blå dag 1 -Insulin,RAST + 10 adm,,Estifanos T
+2026-02-09 11:16:00,2026-02-09 11:56:00,,,Rosa dag 2,RAST + 10 adm,,Marielle Hen
+2026-02-09 11:16:00,2026-02-09 11:56:00,,,Rosa dag 3,RAST + 10 adm,,Mohamed Osma
+2026-02-09 11:20:00,2026-02-09 12:00:00,,,Rosa dag 1,RAST + 10 adm,,Anna Laestad
+2026-02-09 11:24:00,2026-02-09 12:04:00,,,Rosa dag 4,RAST + 10 adm,,Amra
+2026-02-09 11:38:00,2026-02-09 12:03:00,Siv ELISABETH Nilsson,"Fjällhavren 3 Lgh 1103, 42449, ANGERED",Blå dag 4,FH Hemtjänst,"DUBBELBEMANNING 2, Lunchbesök",Malak Shaban
+2026-02-09 11:43:00,2026-02-09 12:28:00,Siv ELISABETH Nilsson,"Fjällhavren 3 Lgh 1103, 42449, ANGERED",Blå dag 5,FH Hemtjänst,"DUBBELBEMANNING 1, Dusch, Lunchbesök",Sahra Mohamm
+2026-02-09 11:44:00,2026-02-09 11:54:00,PIA Kerstin Iversen,"Fjällveronikan 3 Lgh 1302, 42448, ANGERED",Blå dag 2,Hälso och sjukvårdsbeställning,HS Medicin,Kenneth Yugb
+2026-02-09 11:47:00,2026-02-09 12:47:00,KARIN Anna Lena Lundell Olausson,"Kryddkrassegatan 30, 42453, ANGERED",Grön dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Dusch, Lunchbesök",SahraWisemsa
+2026-02-09 11:51:00,2026-02-09 12:51:00,KARIN Anna Lena Lundell Olausson,"Kryddkrassegatan 30, 42453, ANGERED",Grön dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Dusch, Lunchbesök",Ingrid Pino
+2026-02-09 11:55:00,2026-02-09 12:06:00,SONJA Elvira Blomgren,"Fjällsyran 2 Lgh 1201, 42448, ANGERED",Blå dag 1 -Insulin,ÄO Hemtjänst,Sophantering,Estifanos T
+2026-02-09 11:58:00,2026-02-09 13:48:00,BERIT Ingegärd Charlotta Nilsson,"Fjällsippan 6 Lgh 1201, 42448, ANGERED",Blå dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Dusch, Lunchbesök",Kenneth Yugb
+2026-02-09 12:02:00,2026-02-09 13:52:00,BERIT Ingegärd Charlotta Nilsson,"Fjällsippan 6 Lgh 1201, 42448, ANGERED",Blå dag 3,ÄO Hemtjänst,"DUBBELBEMANNING 2, Dusch, Lunchbesök",tsedale
+2026-02-09 12:04:00,2026-02-09 12:19:00,Kahsay Haile Ghide,"Fjäderharvsgatan 46 Lgh 1101, 42466, ANGERED",Rosa dag 3,ÄO Hemtjänst,"DUBBELBEMANNING 1, Lunchbesök",Anna Laestad
+2026-02-09 12:07:00,2026-02-09 12:22:00,Kahsay Haile Ghide,"Fjäderharvsgatan 46 Lgh 1101, 42466, ANGERED",Rosa dag 4,ÄO Hemtjänst,"DUBBELBEMANNING 2, Lunchbesök",Amra
+2026-02-09 12:08:00,2026-02-09 12:23:00,Eugenio Parisi,"Fjällgrönan 8 Lgh 1203, 42449, ANGERED",Blå dag 4,ÄO Hemtjänst,Tillsyn,Malak Shaban
+2026-02-09 12:09:00,2026-02-09 12:29:00,Inger MARGRETH Heirås,"Tangovägen 27, 42454, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 2, Lunchbesök",Samsam Gadud
+2026-02-09 12:09:00,2026-02-09 12:39:00,Ulla Eva Margareta Karlsson,"Gunnaredsterrassen 16, 42466, ANGERED",Rosa dag 4,ÄO Hemtjänst,"Inköp, Lunchbesök, Sophantering",Marielle Hen
+2026-02-09 12:09:00,2026-02-09 12:39:00,Inger MARGRETH Heirås,"Tangovägen 27, 42454, ANGERED",Rosa dag 3,ÄO Hemtjänst,"DUBBELBEMANNING 1, Lunchbesök",Mohamed Osma
+2026-02-09 12:12:00,2026-02-09 12:32:00,Ulla Monica Wesström,"Fjällbruden 218, 42450, ANGERED",Blå dag 1 -Insulin,ÄO Hemtjänst,Tillsyn,Estifanos T
+2026-02-09 12:22:00,2026-02-09 12:32:00,Wai-Yung Ko,"Länkharvsgatan 72 Lgh 1201, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Lunchbesök",Anna Laestad
+2026-02-09 12:27:00,2026-02-09 12:37:00,Wai-Yung Ko,"Länkharvsgatan 72 Lgh 1201, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Lunchbesök",Amra
+2026-02-09 12:28:00,2026-02-09 13:48:00,ROSIE Louise Jönsson,"Fjällhavren 8 Lgh 1501, 42449, ANGERED",Blå dag 4,ÄO Hemtjänst,"DUBBELBEMANNING 1, Lunchbesök, Städ",Malak Shaban
+2026-02-09 12:31:00,2026-02-09 13:51:00,ROSIE Louise Jönsson,"Fjällhavren 8 Lgh 1501, 42449, ANGERED",Blå dag 5,ÄO Hemtjänst,"DUBBELBEMANNING 2, Lunchbesök, Städ",Sahra Mohamm
+2026-02-09 12:35:00,2026-02-09 13:05:00,Badria Nor Mohammed,"Fjäderharvsgatan 46, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,DUBBELBEMANNING 2,Anna Laestad
+2026-02-09 12:35:00,2026-02-09 13:20:00,EVA Katarina Elisabeth Carlsdotter Fägerskjöld,"Fjällbruden 44, 42450, ANGERED",Blå dag 1 -Insulin,ÄO Hemtjänst,Promenad,Estifanos T
+2026-02-09 12:37:00,2026-02-09 14:28:00,Lars Olof Andersson,"Länkharvsgatan 68 Lgh 1201, 42466, ANGERED",Rosa kväll 1,ÄO Ledsagning (avgiftsfritt),Ledsagning,Samsam Gadud
+2026-02-09 12:40:00,2026-02-09 13:10:00,Badria Nor Mohammed,"Fjäderharvsgatan 46, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Lunchbesök",Amra
+2026-02-09 12:45:00,2026-02-09 13:00:00,Ensi Matias Puranen,"Länkharvsgatan 22 Lgh 1001, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,Lunchbesök,Marielle Hen
+2026-02-09 12:48:00,2026-02-09 13:29:00,DAGMAR Louise Hjelm,"Trädgårdsgärdet 60, 42468, ANGERED",Rosa dag 3,ÄO Hemtjänst,"Promenad, Tillsyn",Mohamed Osma
+2026-02-09 12:59:00,2026-02-09 13:29:00,,,Blå kväll 2,UPPSTART,,Filsan Yonis
+2026-02-09 12:59:00,2026-02-09 13:29:00,,,Grön kväll 2,UPPSTART,,Hawa Ibrahim
+2026-02-09 13:01:00,2026-02-09 13:30:00,,,Rosa kväll 2,UPPSTART,,Ahmed Shasha
+2026-02-09 13:01:00,2026-02-09 13:31:00,,,Grön kväll 1,UPPSTART,,Haden Jama
+2026-02-09 13:01:00,2026-02-09 13:31:00,,,Rosa kväll 1,UPPSTART,,Najma Abdi
+2026-02-09 13:01:00,2026-02-09 13:31:00,,,Blå kväll 3,UPPSTART,,Said Salih
+2026-02-09 13:07:00,2026-02-09 13:37:00,Amelia Campus,"Fjäderharvsgatan 42 Lgh 1201, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,"Tillsyn, Tvätt",Marielle Hen
+2026-02-09 13:10:00,2026-02-09 13:20:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Lunchbesök",Anna Laestad
+2026-02-09 13:14:00,2026-02-09 13:49:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Lunchbesök",Amra
+2026-02-09 13:26:00,2026-02-09 13:51:00,HARRY Lars-Göran Svensson,"Fjällgrönan 9 Lgh 1301, 42449, ANGERED",Blå dag 1 -Insulin,ÄO Hemtjänst,Lunchbesök,Estifanos T
+2026-02-09 13:31:00,2026-02-09 14:01:00,,,Blå kväll 1,UPPSTART,,Samia Jimale
+2026-02-09 13:33:00,2026-02-09 14:03:00,ELLINOR Julia Oline Port,"Länkharvsgatan 100 Lgh 1006, 42466, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 1, Lunchbesök",Ahmed Shasha
+2026-02-09 13:35:00,2026-02-09 14:00:00,ELLINOR Julia Oline Port,"Länkharvsgatan 100 Lgh 1006, 42466, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 2, HS Medicin - måste tidsättas, Lunchbesök",Mohamed Osma
+2026-02-09 13:39:00,2026-02-09 14:16:00,Lars-Erik Wester,"Fjäderharvsgatan 51 Lgh 1303, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Lunchbesök, Sophantering, Stöd i hemmet",Anna Laestad
+2026-02-09 13:42:00,2026-02-09 13:47:00,DUNIA Jalal Sedqi Sedqi,"Senapsgatan 18 Lgh 1603, 42443, ANGERED",Grön kväll 1,ÄO Hemtjänst,Sophantering,Said Salih
+2026-02-09 13:42:00,2026-02-09 14:02:00,Agripina NEDDA Barbosa Suarez,"Kummingatan 76 Lgh 1201, 42443, ANGERED",Grön dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Lunchbesök",Haden Jama
+2026-02-09 13:42:00,2026-02-09 14:02:00,Karin Lisette Russo,"Gunnaredsterrassen 8, 42466, ANGERED",Rosa dag 4,ÄO Hemtjänst,Tvätt,Marielle Hen
+2026-02-09 13:42:00,2026-02-09 14:22:00,Agripina NEDDA Barbosa Suarez,"Kummingatan 76 Lgh 1201, 42443, ANGERED",Grön dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Lunchbesök",Hawa Ibrahim
+2026-02-09 13:43:00,2026-02-09 13:57:00,Ulf Arne Eric Norrlin,"Trädgårdsgärdet 156 Lgh 1304, 42468, ANGERED",Rosa dag 3,ÄO Hemtjänst,Inköp,Najma Abdi
+2026-02-09 13:49:00,2026-02-09 14:09:00,,,Grön dag 2,AVSLUT,,SahraWisemsa
+2026-02-09 13:50:00,2026-02-09 14:05:00,Stig Arne Oskarsson,"Senapsgatan 1 Lgh 1301, 42443, ANGERED",Grön dag 2,ÄO Hemtjänst,Inköp,Said Salih
+2026-02-09 13:52:00,2026-02-09 14:29:00,Lars-Erik Wester,"Fjäderharvsgatan 51 Lgh 1303, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, HS Medicin, Lunchbesök, Sophantering, Stöd i hemmet",Amra
+2026-02-09 13:53:00,2026-02-09 14:08:00,Siv ELISABETH Nilsson,"Fjällhavren 3 Lgh 1103, 42449, ANGERED",Blå dag 4,FH Hemtjänst,"DUBBELBEMANNING 1, Tillsyn",Malak Shaban
+2026-02-09 13:55:00,2026-02-09 14:18:00,PIA Kerstin Iversen,"Fjällveronikan 3 Lgh 1302, 42448, ANGERED",Blå dag 2,ÄO Hemtjänst,"HS Medicin, Lunchbesök",Kenneth Yugb
+2026-02-09 13:57:00,2026-02-09 14:02:00,Siv ELISABETH Nilsson,"Fjällhavren 3 Lgh 1103, 42449, ANGERED",Blå dag 5,FH Hemtjänst,"DUBBELBEMANNING 2, Tillsyn",Sahra Mohamm
+2026-02-09 13:57:00,2026-02-09 14:07:00,Olof Sterner MIKAEL Hermansson,"Fjällsyran 5, 42448, GÖTEBORG",Blå dag 1 -Insulin,FH Hemtjänst,Stöd i hemmet,Estifanos T
+2026-02-09 14:02:00,2026-02-09 14:22:00,Björn Erik Pedersen,"Fjällviolen 7 Lgh 1102, 42448, ANGERED",Blå dag 3,ÄO Hemtjänst,Lunchbesök,tsedale
+2026-02-09 14:04:00,2026-02-09 14:19:00,LILIAN Gunnel Margareta Johansson,"Trädgårdsgärdet 22 Lgh 1101, 42468, ANGERED",Rosa dag 3,ÄO Hemtjänst,"HS Medicin, Lunchbesök",Najma Abdi
+2026-02-09 14:06:00,2026-02-09 14:51:00,YOHANES Mesele Demese,"Fjällkåpan 8 Lgh 1001, 42449, ANGERED",Blå dag 3,FH Hemtjänst,"Dusch, Lunchbesök",Sahra Mohamm
+2026-02-09 14:08:00,2026-02-09 14:27:00,INGRID Margareta Larsson,"Fjäderharvsgatan 81 Lgh 1003, 42466, ANGERED",Rosa dag 1,FH Hemtjänst,"HS Medicin, HS Medicin - måste tidsättas, Lunchbesök, Sophantering",Ahmed Shasha
+2026-02-09 14:10:00,2026-02-09 14:24:00,ULLA Tuulikki Sarja,"Kummingatan 24 Lgh 1201, 42443, ANGERED",Grön dag 1,FH Hemtjänst,Sophantering,Haden Jama
+2026-02-09 14:12:00,2026-02-09 14:27:00,Abdou Bah,"Fjällgrönan 5 Lgh 1201, 42449, ANGERED",Blå dag 1 -Insulin,FH Hemtjänst,Hantering - inköp,Estifanos T
+2026-02-09 14:13:00,2026-02-09 15:10:00,Edy Mulyono,"Fänkålsgatan 13, 42443, ANGERED",Grön kväll 2,ÄO Hemtjänst,"Inköp, Lunchbesök, Promenad",Said Salih
+2026-02-09 14:14:00,2026-02-09 14:57:00,Muhamed Josof Ali,"Fjällviolen 7 Lgh 1502, 42448, ANGERED",Blå dag 3,FH Hemtjänst,"Dusch, Lunchbesök",Malak Shaban
+2026-02-09 14:18:00,2026-02-09 15:13:00,JEAN Georg Engström,"Fjällsyran 6 Lgh 1402, 42448, ANGERED",Blå kväll 3,FH Hemtjänst,"Dusch, Stöd i hemmet",Filsan Yonis
+2026-02-09 14:19:00,2026-02-09 14:39:00,,,Rosa dag 1,AVSLUT,,
+2026-02-09 14:21:00,2026-02-09 15:06:00,Khadidja Abdraman Oumar,"Fjällviolen 7 Lgh 1203, 42448, ANGERED",Blå kväll 1,ÄO Hemtjänst,Promenad,Samia Jimale
+2026-02-09 14:24:00,2026-02-09 14:39:00,Sven INGE Nordås,"Fjällkåpan 9 Lgh 1503, 42449, ANGERED",Blå kväll 2,FH Hemtjänst,Inköp,Kenneth Yugb
+2026-02-09 14:30:00,2026-02-09 15:11:00,Jörgen Einar Sommerlöf,"Kryddpeppargatan 1, 42453, ANGERED",Grön kväll 2,ÄO Hemtjänst,"HS  Rehab, HS Medicin, Lunchbesök",Hawa Ibrahim
+2026-02-09 14:30:00,2026-02-09 15:29:00,Kyllikki ANETTE Pikerpöld,"Fjällnejlikan 6 Lgh 1402, 42448, ANGERED",Blå dag 2,FH Hemtjänst,"Hantering - inköp, Lunchbesök, Sophantering, Städ, Stöd i hemmet",tsedale
+2026-02-09 14:31:00,2026-02-09 14:36:00,MARKETTA Heljä Kauppinen,"Tangovägen 19, 42454, ANGERED",Rosa kväll 2,ÄO Hemtjänst,Sophantering,Najma Abdi
+2026-02-09 14:31:00,2026-02-09 15:11:00,ANNE Marie Gurley,"Fjällkåpan 10 Lgh 1202, 42449, ANGERED",Blå dag 4,FH Hemtjänst psyk,"Städ, Stöd i hemmet",Estifanos T
+2026-02-09 14:42:00,2026-02-09 14:57:00,Jan-Pether Näslund,"Fjällveronikan 1 Lgh 1401, 42448, ANGERED",Blå kväll 2,FH Hemtjänst,Tillsyn,Kenneth Yugb
+2026-02-09 14:57:00,2026-02-09 15:27:00,Arian Majidi,"Fjällbruden 4, 42450, ANGERED",Blå dag 1 -Insulin,FH Hemtjänst psyk,Promenad,Sahra Mohamm
+2026-02-09 15:00:00,2026-02-09 15:30:00,Ann-Mari Holmer,"Fjällveronikan 5 Lgh 1501, 42448, ANGERED",Blå kväll 2,ÄO Hemtjänst,"Inköp, Sophantering",Kenneth Yugb
+2026-02-09 15:10:00,2026-02-09 15:30:00,,,Rosa dag 4,AVSLUT,,Amra
+2026-02-09 15:10:00,2026-02-09 15:30:00,,,Grön dag 1,AVSLUT,,Malak Shaban
+2026-02-09 15:15:00,2026-02-09 15:30:00,Björn Erik Pedersen,"Fjällviolen 7 Lgh 1102, 42448, ANGERED",Blå kväll 1,ÄO Hemtjänst,Eftermiddagsbesök,Samia Jimale
+2026-02-09 15:16:00,2026-02-09 15:31:00,Ingalill Olsson Cedås,"Kryddpeppargatan 49, 42453, ANGERED",Grön kväll 2,ÄO Hemtjänst,Lunchbesök,Hawa Ibrahim
+2026-02-09 15:17:00,2026-02-09 16:02:00,SAINI Maija-Liisa Salminen,"Senapsgatan 12 Lgh 1403, 42443, ANGERED",Grön dag 2,ÄO Hemtjänst,"Promenad, Sophantering, Stöd i hemmet",Said Salih
+2026-02-09 15:21:00,2026-02-09 15:31:00,JEAN Georg Engström,"Fjällsyran 6 Lgh 1402, 42448, ANGERED",Blå kväll 3,Hälso och sjukvårdsbeställning,HS Medicin,Filsan Yonis
+2026-02-09 15:36:00,2026-02-09 15:56:00,Kyllikki ANETTE Pikerpöld,"Fjällnejlikan 6 Lgh 1402, 42448, ANGERED",Blå kväll 3,FH Hemtjänst,Eftermiddagsbesök,Samia Jimale
+2026-02-09 15:38:00,2026-02-09 15:58:00,,,Blå dag 5,AVSLUT,,Sahra Mohamm
+2026-02-09 15:38:00,2026-02-09 15:58:00,,,Blå dag 3,AVSLUT,,tsedale
+2026-02-09 15:38:00,2026-02-09 15:58:00,,,Blå dag 1 -Insulin,AVSLUT,,Estifanos T
+2026-02-09 15:38:00,2026-02-09 15:58:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa dag 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Eftermiddagsbesök",Najma Abdi
+2026-02-09 15:39:00,2026-02-09 15:59:00,,,Blå dag 2,AVSLUT,,Kenneth Yugb
+2026-02-09 15:40:00,2026-02-09 16:00:00,,,Rosa dag 2,AVSLUT,,Marielle Hen
+2026-02-09 15:40:00,2026-02-09 16:00:00,,,Blå dag 4,AVSLUT,,Mohamed Osma
+2026-02-09 15:43:00,2026-02-09 16:03:00,,,Rosa dag 3,AVSLUT,,Anna Laestad
+2026-02-09 15:46:00,2026-02-09 15:56:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa dag 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Eftermiddagsbesök",Ahmed Shasha
+2026-02-09 15:50:00,2026-02-09 16:10:00,KARIN Anna Lena Lundell Olausson,"Kryddkrassegatan 30, 42453, ANGERED",Grön kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Eftermiddagsbesök",Hawa Ibrahim
+2026-02-09 15:50:00,2026-02-09 16:10:00,KARIN Anna Lena Lundell Olausson,"Kryddkrassegatan 30, 42453, ANGERED",Grön kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Eftermiddagsbesök",Haden Jama
+2026-02-09 16:01:00,2026-02-09 16:16:00,Lars-Erik Wester,"Fjäderharvsgatan 51 Lgh 1303, 42466, ANGERED",Rosa kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Eftermiddagsbesök",Ahmed Shasha
+2026-02-09 16:01:00,2026-02-09 16:26:00,ROSIE Louise Jönsson,"Fjällhavren 8 Lgh 1501, 42449, ANGERED",Blå kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Eftermiddagsbesök",Filsan Yonis
+2026-02-09 16:02:00,2026-02-09 16:17:00,Lars-Erik Wester,"Fjäderharvsgatan 51 Lgh 1303, 42466, ANGERED",Rosa kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Eftermiddagsbesök",Najma Abdi
+2026-02-09 16:03:00,2026-02-09 16:28:00,ROSIE Louise Jönsson,"Fjällhavren 8 Lgh 1501, 42449, ANGERED",Blå kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Eftermiddagsbesök",Samia Jimale
+2026-02-09 16:18:00,2026-02-09 16:28:00,Agripina NEDDA Barbosa Suarez,"Kummingatan 76 Lgh 1201, 42443, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 2, Eftermiddagsbesök",Haden Jama
+2026-02-09 16:18:00,2026-02-09 16:48:00,Agripina NEDDA Barbosa Suarez,"Kummingatan 76 Lgh 1201, 42443, ANGERED",Grön kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Eftermiddagsbesök",Hawa Ibrahim
+2026-02-09 16:20:00,2026-02-09 16:48:00,Badria Nor Mohammed,"Fjäderharvsgatan 46, 42466, ANGERED",Rosa kväll 2,ÄO Hemtjänst,DUBBELBEMANNING 2,Ahmed Shasha
+2026-02-09 16:21:00,2026-02-09 16:48:00,Badria Nor Mohammed,"Fjäderharvsgatan 46, 42466, ANGERED",Rosa kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Tillsyn",Najma Abdi
+2026-02-09 16:31:00,2026-02-09 16:46:00,Per KENT Johansson,"Fjällbinkan 2 Lgh 1702, 42449, ANGERED",Blå kväll 2,ÄO Hemtjänst,Inköp,Filsan Yonis
+2026-02-09 16:39:00,2026-02-09 16:54:00,DAGMAR Louise Hjelm,"Trädgårdsgärdet 60, 42468, ANGERED",Rosa kväll 2,ÄO Hemtjänst,"HS Medicin, Tillsyn",Haden Jama
+2026-02-09 16:44:00,2026-02-09 16:59:00,Maria MARTA Amigo Chaparro,"Kummingatan 52 Lgh 1001, 42443, ANGERED",Grön kväll 1,ÄO Hemtjänst,"Hantering - inköp, Sophantering",Said Salih
+2026-02-09 16:52:00,2026-02-09 17:02:00,Wai-Yung Ko,"Länkharvsgatan 72 Lgh 1201, 42466, ANGERED",Rosa kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Eftermiddagsbesök",Najma Abdi
+2026-02-09 16:53:00,2026-02-09 17:03:00,Wai-Yung Ko,"Länkharvsgatan 72 Lgh 1201, 42466, ANGERED",Rosa kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Eftermiddagsbesök",Ahmed Shasha
+2026-02-09 16:56:00,2026-02-09 17:36:00,,,Blå kväll 2,RAST + 10 adm,,Filsan Yonis
+2026-02-09 16:56:00,2026-02-09 17:36:00,,,Blå kväll 1,RAST + 10 adm,,Samia Jimale
+2026-02-09 17:04:00,2026-02-09 17:17:00,Edy Mulyono,"Fänkålsgatan 13, 42443, ANGERED",Grön kväll 2,ÄO Hemtjänst,Eftermiddagsbesök,Said Salih
+2026-02-09 17:05:00,2026-02-09 17:23:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Tillsyn",Najma Abdi
+2026-02-09 17:06:00,2026-02-09 17:16:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Tillsyn",Ahmed Shasha
+2026-02-09 17:06:00,2026-02-09 17:21:00,Inger MARGRETH Heirås,"Tangovägen 27, 42454, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 2, Eftermiddagsbesök",Hawa Ibrahim
+2026-02-09 17:06:00,2026-02-09 17:26:00,Inger MARGRETH Heirås,"Tangovägen 27, 42454, ANGERED",Rosa kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Eftermiddagsbesök",Haden Jama
+2026-02-09 17:19:00,2026-02-09 17:59:00,,,Rosa kväll 1,RAST + 10 adm,,Ahmed Shasha
+2026-02-09 17:26:00,2026-02-09 18:06:00,,,Blå kväll 3,RAST + 10 adm,,Said Salih
+2026-02-09 17:27:00,2026-02-09 18:07:00,,,Grön kväll 2,RAST + 10 adm,,Hawa Ibrahim
+2026-02-09 17:28:00,2026-02-09 18:08:00,,,,RAST + 10 adm,,Najma Abdi
+2026-02-09 17:30:00,2026-02-09 18:10:00,,,Rosa kväll 2,RAST + 10 adm,,
+2026-02-09 17:36:00,2026-02-09 18:16:00,,,Grön kväll 1,RAST + 10 adm,,Haden Jama
+2026-02-09 17:57:00,2026-02-09 18:37:00,BERIT Ingegärd Charlotta Nilsson,"Fjällsippan 6 Lgh 1201, 42448, ANGERED",Blå kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Eftermiddagsbesök",Filsan Yonis
+2026-02-09 17:57:00,2026-02-09 18:37:00,BERIT Ingegärd Charlotta Nilsson,"Fjällsippan 6 Lgh 1201, 42448, ANGERED",Blå kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Eftermiddagsbesök",Samia Jimale
+2026-02-09 18:05:00,2026-02-09 18:15:00,ULLA Anita Andersson,"Rappedalsvägen 9 D, 42468, ANGERED",Rosa kväll 1,ÄO Hemtjänst,Kvällsbesök,AhmadAlsadi
+2026-02-09 18:08:00,2026-02-09 18:28:00,Badria Nor Mohammed,"Fjäderharvsgatan 46, 42466, ANGERED",Grön kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, HS Insulin, HS Medicin, Kvällsbesök",Ahmed Shasha
+2026-02-09 18:12:00,2026-02-09 18:32:00,Badria Nor Mohammed,"Fjäderharvsgatan 46, 42466, ANGERED",Grön kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Najma Abdi
+2026-02-09 18:14:00,2026-02-09 18:29:00,LILIAN Gunnel Margareta Johansson,"Trädgårdsgärdet 22 Lgh 1101, 42468, ANGERED",Rosa kväll 2,ÄO Hemtjänst,"HS Medicin, Kvällsbesök",Hawa Ibrahim
+2026-02-09 18:22:00,2026-02-09 18:37:00,Ulla Eva Margareta Karlsson,"Gunnaredsterrassen 16, 42466, ANGERED",Rosa kväll 1,ÄO Hemtjänst,Kvällsbesök,AhmadAlsadi
+2026-02-09 18:23:00,2026-02-09 18:38:00,Helmut Wilhelm Emmerich,"Titteridammshöjden 32, 42468, ANGERED",Rosa kväll 2,Hälso och sjukvårdsbeställning,"HS Insulin, HS Medicin",Haden Jama
+2026-02-09 18:23:00,2026-02-09 18:43:00,Ulla Monica Wesström,"Fjällbruden 218, 42450, ANGERED",Blå kväll 3,ÄO Hemtjänst,"HS Medicin, Kvällsbesök",Said Salih
+2026-02-09 18:32:00,2026-02-09 18:52:00,Lars-Erik Wester,"Fjäderharvsgatan 51 Lgh 1303, 42466, ANGERED",Grön kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, HS Medicin, Kvällsbesök",Ahmed Shasha
+2026-02-09 18:33:00,2026-02-09 18:53:00,Ulla Doris Linnéa Johansson,"Trädgårdsgärdet 98 Lgh 1403, 42468, ANGERED",Rosa kväll 2,ÄO Hemtjänst,Kvällsbesök,Hawa Ibrahim
+2026-02-09 18:35:00,2026-02-09 18:55:00,Lars-Erik Wester,"Fjäderharvsgatan 51 Lgh 1303, 42466, ANGERED",Grön kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Najma Abdi
+2026-02-09 18:44:00,2026-02-09 18:57:00,DAGMAR Louise Hjelm,"Trädgårdsgärdet 60, 42468, ANGERED",Rosa kväll 2,ÄO Hemtjänst,"HS Insulin, Tillsyn",Haden Jama
+2026-02-09 18:44:00,2026-02-09 19:05:00,Suhra Arapovic,"Fjällbinkan 7 Lgh 1201, 42449, ANGERED",Blå kväll 2,FH Hemtjänst,"Dusch, Kvällsbesök",Filsan Yonis
+2026-02-09 18:48:00,2026-02-09 19:13:00,Björn Erik Pedersen,"Fjällviolen 7 Lgh 1102, 42448, ANGERED",Blå kväll 1,ÄO Hemtjänst,"HS Medicin, Kvällsbesök",Samia Jimale
+2026-02-09 18:49:00,2026-02-09 19:04:00,EVA Katarina Elisabeth Carlsdotter Fägerskjöld,"Fjällbruden 44, 42450, ANGERED",Blå kväll 3,ÄO Hemtjänst,Kvällsbesök,Said Salih
+2026-02-09 18:51:00,2026-02-09 18:56:00,PENTTI Olavi Ekman,"Länkharvsgatan 2 Lgh 1001, 42466, ANGERED",Rosa kväll 1,ÄO Hemtjänst,Kvällsbesök,Ahmed Shasha
+2026-02-09 19:00:00,2026-02-09 19:15:00,Kahsay Haile Ghide,"Fjäderharvsgatan 46 Lgh 1101, 42466, ANGERED",Grön kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Kvällsbesök",Ahmed Shasha
+2026-02-09 19:02:00,2026-02-09 19:17:00,Edy Mulyono,"Fänkålsgatan 13, 42443, ANGERED",Grön kväll 2,ÄO Hemtjänst,"HS Medicin, Kvällsbesök",Hawa Ibrahim
+2026-02-09 19:03:00,2026-02-09 19:18:00,Jörgen Einar Sommerlöf,"Kryddpeppargatan 1, 42453, ANGERED",Grön kväll 2,ÄO Hemtjänst,"HS Medicin, Kvällsbesök",Haden Jama
+2026-02-09 19:05:00,2026-02-09 19:20:00,Kahsay Haile Ghide,"Fjäderharvsgatan 46 Lgh 1101, 42466, ANGERED",Grön kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, HS Insulin, Kvällsbesök",Najma Abdi
+2026-02-09 19:08:00,2026-02-09 19:10:00,Jan-Pether Näslund,"Fjällveronikan 1 Lgh 1401, 42448, ANGERED",Blå kväll 3,FH Ringtillsyn,Ringtillsyn,Said Salih
+2026-02-09 19:10:00,2026-02-09 19:20:00,AWAZ Abdulrahman,"Fjällgrönan 10 Lgh 1101, 42449, ANGERED",Blå kväll 3,Hälso och sjukvårdsbeställning,HS P-Glukos,Filsan Yonis
+2026-02-09 19:14:00,2026-02-09 19:24:00,ANNE Marie Gurley,"Fjällkåpan 10 Lgh 1202, 42449, ANGERED",Blå kväll 3,Hälso och sjukvårdsbeställning,HS Medicin,Said Salih
+2026-02-09 19:19:00,2026-02-09 19:29:00,Wai-Yung Ko,"Länkharvsgatan 72 Lgh 1201, 42466, ANGERED",Grön kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Kvällsbesök",Ahmed Shasha
+2026-02-09 19:20:00,2026-02-09 19:50:00,YOHANES Mesele Demese,"Fjällkåpan 8 Lgh 1001, 42449, ANGERED",Blå kväll 1,FH Hemtjänst,Kvällsbesök,Samia Jimale
+2026-02-09 19:22:00,2026-02-09 19:27:00,Kjell Lennart Andersson,"Senapsgatan 13 Lgh 1203, 42443, GÖTEBORG",Grön kväll 1,ÄO Hemtjänst,"HS Medicin, Kvällsbesök",Hawa Ibrahim
+2026-02-09 19:22:00,2026-02-09 19:37:00,HARRY Lars-Göran Svensson,"Fjällgrönan 9 Lgh 1301, 42449, ANGERED",Blå kväll 1,ÄO Hemtjänst,Kvällsbesök,Filsan Yonis
+2026-02-09 19:24:00,2026-02-09 19:34:00,Wai-Yung Ko,"Länkharvsgatan 72 Lgh 1201, 42466, ANGERED",Grön kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Najma Abdi
+2026-02-09 19:25:00,2026-02-09 19:35:00,Stig Arne Oskarsson,"Senapsgatan 1 Lgh 1301, 42443, ANGERED",Grön kväll 1,ÄO Hemtjänst,Kvällsbesök,Haden Jama
+2026-02-09 19:26:00,2026-02-09 19:36:00,Boris Bohun,"FJÄLLKÅPAN 10 LGH 1101, 42449, ANGERED",Blå kväll 3,Hälso och sjukvårdsbeställning,HS Medicin,Said Salih
+2026-02-09 19:32:00,2026-02-09 19:37:00,Hussein Fadil Feili,"LÄNKHARVSGATAN 48, 42466, ANGERED",Rosa kväll 2,Hälso och sjukvårdsbeställning,"DUBBELBEMANNING 2, HS Medicin",Ahmed Shasha
+2026-02-09 19:35:00,2026-02-09 19:40:00,Eija Marjaana Nieminen,"Kryddväxtgatan 12, 42453, ANGERED",Grön kväll 1,ÄO Hemtjänst,Kvällsbesök,Hawa Ibrahim
+2026-02-09 19:38:00,2026-02-09 19:43:00,Hussein Fadil Feili,"LÄNKHARVSGATAN 48, 42466, ANGERED",Rosa kväll 1,Hälso och sjukvårdsbeställning,"DUBBELBEMANNING 1, HS Medicin",Najma Abdi
+2026-02-09 19:40:00,2026-02-09 19:50:00,ANN-BRITT Lillemor Udd,"Fjällveronikan 5 Lgh 1101, 42448, ANGERED",Blå kväll 3,ÄO Hemtjänst,Kvällsbesök,Said Salih
+2026-02-09 19:40:00,2026-02-09 20:05:00,LENA Gunbritt Versén,"Senapsgatan 15 Lgh 1303, 42443, ANGERED",Grön kväll 1,ÄO Hemtjänst,"HS Insulin, HS Medicin, HS P-Glukos, Kvällsbesök",Haden Jama
+2026-02-09 19:41:00,2026-02-09 19:51:00,Ahmad Daneshi,"Fjällbinkan 6 Lgh 1601, 42449, ANGERED",Blå kväll 2,ÄO Hemtjänst,Kvällsbesök,Filsan Yonis
+2026-02-09 19:44:00,2026-02-09 20:04:00,ELLINOR Julia Oline Port,"Länkharvsgatan 100 Lgh 1006, 42466, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 1, HS Insulin, HS Medicin, Kvällsbesök",Ahmed Shasha
+2026-02-09 19:48:00,2026-02-09 20:03:00,ELLINOR Julia Oline Port,"Länkharvsgatan 100 Lgh 1006, 42466, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Najma Abdi
+2026-02-09 19:50:00,2026-02-09 20:10:00,Heber Marquez Barbosa,"Kummingatan 76 Lgh 1201, 42443, ANGERED",Grön kväll 2,FH Hemtjänst psyk,Kvällsbesök,Hawa Ibrahim
+2026-02-09 19:53:00,2026-02-09 20:08:00,PIA Kerstin Iversen,"Fjällveronikan 3 Lgh 1302, 42448, ANGERED",Blå kväll 3,ÄO Hemtjänst,"HS Medicin, Kvällsbesök",Said Salih
+2026-02-09 19:55:00,2026-02-09 20:03:00,Per KENT Johansson,"Fjällbinkan 2 Lgh 1702, 42449, ANGERED",Blå kväll 2,ÄO Hemtjänst,Tillsyn,Filsan Yonis
+2026-02-09 20:00:00,2026-02-09 20:20:00,Siv ELISABETH Nilsson,"Fjällhavren 3 Lgh 1103, 42449, ANGERED",Blå kväll 1,FH Hemtjänst,"DUBBELBEMANNING 1, Kvällsbesök",Samia Jimale
+2026-02-09 20:06:00,2026-02-09 20:16:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Ahmed Shasha
+2026-02-09 20:06:00,2026-02-09 20:41:00,Habib Mohammad Jaffer,"Länkharvsgatan 27 Lgh 1102, 42466, ANGERED",Rosa kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Kvällsbesök",Najma Abdi
+2026-02-09 20:08:00,2026-02-09 20:18:00,Siv ELISABETH Nilsson,"Fjällhavren 3 Lgh 1103, 42449, ANGERED",Blå kväll 2,FH Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Filsan Yonis
+2026-02-09 20:10:00,2026-02-09 20:30:00,Agripina NEDDA Barbosa Suarez,"Kummingatan 76 Lgh 1201, 42443, ANGERED",Grön kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Haden Jama
+2026-02-09 20:10:00,2026-02-09 20:30:00,Agripina NEDDA Barbosa Suarez,"Kummingatan 76 Lgh 1201, 42443, ANGERED",Grön kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Kvällsbesök",Hawa Ibrahim
+2026-02-09 20:12:00,2026-02-09 20:27:00,Kyllikki ANETTE Pikerpöld,"Fjällnejlikan 6 Lgh 1402, 42448, ANGERED",Blå kväll 3,FH Hemtjänst,"HS Medicin, Kvällsbesök",Said Salih
+2026-02-09 20:22:00,2026-02-09 20:52:00,ROSIE Louise Jönsson,"Fjällhavren 8 Lgh 1501, 42449, ANGERED",Blå kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Filsan Yonis
+2026-02-09 20:23:00,2026-02-09 20:53:00,ROSIE Louise Jönsson,"Fjällhavren 8 Lgh 1501, 42449, ANGERED",Blå kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Kvällsbesök",Samia Jimale
+2026-02-09 20:33:00,2026-02-09 20:48:00,Bert TOMMY Antonsson,"Idtjärnsgatan 28, 42450, ANGERED",Blå kväll 3,Hälso och sjukvårdsbeställning,"HS Insulin, HS Medicin, HS P-Glukos",Said Salih
+2026-02-09 20:36:00,2026-02-09 20:56:00,KARIN Anna Lena Lundell Olausson,"Kryddkrassegatan 30, 42453, ANGERED",Grön kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 1, Kvällsbesök",Hawa Ibrahim
+2026-02-09 20:37:00,2026-02-09 20:57:00,KARIN Anna Lena Lundell Olausson,"Kryddkrassegatan 30, 42453, ANGERED",Grön kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Haden Jama
+2026-02-09 20:38:00,2026-02-09 20:48:00,Rade Vuleta,"Länkharvsgatan 62 Lgh 1103, 42466, ANGERED",Rosa kväll 1,Hälso och sjukvårdsbeställning,HS Medicin,Ahmed Shasha
+2026-02-09 20:46:00,2026-02-09 20:56:00,Nusret Cocalic,"Länkharvsgatan 100 Lgh 1105, 42466, ANGERED",Rosa kväll 1,Hälso och sjukvårdsbeställning,HS Medicin,Najma Abdi
+2026-02-09 20:53:00,2026-02-09 21:03:00,JEAN Georg Engström,"Fjällsyran 6 Lgh 1402, 42448, ANGERED",Blå kväll 3,Hälso och sjukvårdsbeställning,HS Medicin,Said Salih
+2026-02-09 20:55:00,2026-02-09 21:25:00,INGRID Margareta Larsson,"Fjäderharvsgatan 81 Lgh 1003, 42466, ANGERED",Rosa kväll 1,FH Hemtjänst,"DUBBELBEMANNING 1, HS Insulin, HS Medicin, HS P-Glukos, Kvällsbesök",Ahmed Shasha
+2026-02-09 20:57:00,2026-02-09 21:12:00,Nils STURE Lennart Hedlund,"Fjällviolen 8 Lgh 1001, 42448, ANGERED",Blå kväll 1,ÄO Hemtjänst,Kvällsbesök,Filsan Yonis
+2026-02-09 20:58:00,2026-02-09 21:05:00,Karin VERONICA Törnblom,"Fjällviolen 4 Lgh 1101, 42448, ANGERED",Blå kväll 1,Hälso och sjukvårdsbeställning,HS Medicin,Samia Jimale
+2026-02-09 21:01:00,2026-02-09 21:16:00,INGRID Margareta Larsson,"Fjäderharvsgatan 81 Lgh 1003, 42466, ANGERED",Rosa kväll 2,FH Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Najma Abdi
+2026-02-09 21:07:00,2026-02-09 21:17:00,Junior Singbo Denge Wa Tata,"FJÄLLSYRAN 1 LGH 1402, 42448, ANGERED",Blå kväll 3,Hälso och sjukvårdsbeställning,HS Medicin,Said Salih
+2026-02-09 21:08:00,2026-02-09 21:23:00,Inger MARGRETH Heirås,"Tangovägen 27, 42454, ANGERED",,ÄO Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Hawa Ibrahim
+2026-02-09 21:08:00,2026-02-09 21:28:00,Inger MARGRETH Heirås,"Tangovägen 27, 42454, ANGERED",Rosa kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Kvällsbesök",Haden Jama
+2026-02-09 21:20:00,2026-02-09 22:00:00,BERIT Ingegärd Charlotta Nilsson,"Fjällsippan 6 Lgh 1201, 42448, ANGERED",Blå kväll 2,ÄO Hemtjänst,"DUBBELBEMANNING 2, Kvällsbesök",Filsan Yonis
+2026-02-09 21:20:00,2026-02-09 22:00:00,BERIT Ingegärd Charlotta Nilsson,"Fjällsippan 6 Lgh 1201, 42448, ANGERED",Blå kväll 1,ÄO Hemtjänst,"DUBBELBEMANNING 1, Kvällsbesök",Samia Jimale
+2026-02-09 21:21:00,2026-02-09 21:36:00,Xhavit Aziri,"FJÄLLVERONIKAN 4 LGH 1101, 42448, ANGERED",Blå kväll 3,Hälso och sjukvårdsbeställning,"HS Insulin, HS Medicin, HS P-Glukos",Said Salih
+2026-02-09 21:23:00,2026-02-09 21:33:00,Ensi Matias Puranen,"Länkharvsgatan 22 Lgh 1001, 42466, ANGERED",Rosa kväll 2,ÄO Hemtjänst,"HS Medicin, Kvällsbesök",Najma Abdi
+2026-02-09 21:38:00,2026-02-09 21:58:00,,,Rosa kväll 2,AVSLUT,,Najma Abdi
+2026-02-09 21:38:00,2026-02-09 21:58:00,,,Grön kväll 1,AVSLUT,,Haden Jama
+2026-02-09 21:38:00,2026-02-09 21:58:00,,,Grön kväll 2,AVSLUT,,Hawa Ibrahim
+2026-02-09 21:41:00,2026-02-09 22:01:00,,,Rosa kväll 1,AVSLUT,,Ahmed Shasha
+2026-02-09 21:41:00,2026-02-09 22:01:00,Emine Shipoli,"FJÄLLSIPPAN 2 LGH 1103, 42448, ANGERED",Blå kväll 3,Hälso och sjukvårdsbeställning,HS Peg,Said Salih
+2026-02-09 22:10:00,2026-02-09 22:30:00,,,Blå kväll 3,AVSLUT,,Said Salih
+2026-02-09 22:10:00,2026-02-09 22:30:00,,,Blå kväll 2,AVSLUT,,Filsan Yonis
+2026-02-09 22:10:00,2026-02-09 22:30:00,,,Blå kväll 1,AVSLUT,,Samia Jimale
