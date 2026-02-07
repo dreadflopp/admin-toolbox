@@ -27,7 +27,7 @@ a = Analysis(
     noarchive=False,
 )
 
-pyz = PYZ(a.pure, a.zippath, a.scripts)
+pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
