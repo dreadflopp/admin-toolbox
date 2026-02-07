@@ -1,0 +1,21 @@
+# Secrets - never commit
+config.json
+
+# Geocoding cache (address -> lat/lng only)
+geocache.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

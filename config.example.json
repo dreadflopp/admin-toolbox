@@ -1,0 +1,80 @@
+{
+  "google_maps_api_key": "",
+  "disable_webengine_map": false,
+  "prefer_leaflet_map": false,
+  "default_route_address": "Angereds Torg 5, 42465 Angered",
+  "route_rules": [
+    {
+      "type": "fill_default_address",
+      "column": "Besökstyp",
+      "prefixes": [
+        "AVSLUT",
+        "UPPSTART",
+        "RAST"
+      ]
+    },
+    {
+      "type": "remove_starts_with",
+      "column": "Besökstyp",
+      "pattern": "ÄO Ringtillsyn"
+    },
+    {
+      "type": "remove_empty",
+      "column": "Adress"
+    },
+    {
+      "type": "remove_empty",
+      "column": "Slinga"
+    },
+    {
+      "type": "remove_starts_with",
+      "column": "Slinga",
+      "pattern": "xExterna"
+    },
+    {
+      "type": "remove_starts_with",
+      "column": "Sign.",
+      "pattern": "AVBOK"
+    },
+    {
+      "type": "remove_starts_with",
+      "column": "Sign.",
+      "pattern": "SJUKHUS"
+    }
+  ],
+  "default_location_name": "Kontor",
+  "route_color_rules": [
+    {
+      "color": "#e91e63",
+      "contains": "Rosa"
+    },
+    {
+      "color": "#3498db",
+      "contains": "Blå"
+    },
+    {
+      "color": "#e74c3c",
+      "contains": "Röd"
+    },
+    {
+      "color": "#27ae60",
+      "contains": "Grön"
+    },
+    {
+      "color": "#f1c40f",
+      "contains": "Gul"
+    },
+    {
+      "color": "#e67e22",
+      "contains": "Orange"
+    },
+    {
+      "color": "#9b59b6",
+      "contains": "Lila"
+    },
+    {
+      "color": "#00bcd4",
+      "contains": "Cyan"
+    }
+  ]
+}
