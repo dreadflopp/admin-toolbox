@@ -2,6 +2,7 @@
 Utility functions for data extraction, export, geocoding, and map rendering.
 """
 
+import hashlib
 import json
 import os
 import re
@@ -606,29 +607,60 @@ def export_route_to_excel(df: pd.DataFrame, path: str) -> None:
 
 
 # =============================================================================
-# Geocoding with geocache
+# Geocoding with geocache (addresses hashed for privacy)
 # =============================================================================
 
 
+def _hash_address(address: str) -> str:
+    """Hash address for storage. Strips whitespace first."""
+    return hashlib.sha256(address.strip().encode("utf-8")).hexdigest()
+
+
 def _ensure_geocache_table(conn: sqlite3.Connection) -> None:
+    """Create geocache table. Migrates old schema (address) to new (address_hash) if needed."""
+    cur = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='geocache'")
+    if cur.fetchone():
+        cur = conn.execute("PRAGMA table_info(geocache)")
+        cols = [row[1] for row in cur.fetchall()]
+        if "address" in cols and "address_hash" not in cols:
+            conn.execute("DROP TABLE geocache")
+            conn.commit()
     conn.execute(
-        "CREATE TABLE IF NOT EXISTS geocache (address TEXT PRIMARY KEY, lat REAL NOT NULL, lng REAL NOT NULL)"
+        "CREATE TABLE IF NOT EXISTS geocache (address_hash TEXT PRIMARY KEY, lat REAL NOT NULL, lng REAL NOT NULL)"
     )
     conn.commit()
 
 
 def _get_cached_coords(conn: sqlite3.Connection, address: str) -> Optional[Tuple[float, float]]:
-    cur = conn.execute("SELECT lat, lng FROM geocache WHERE address = ?", (address.strip(),))
+    addr_hash = _hash_address(address)
+    cur = conn.execute("SELECT lat, lng FROM geocache WHERE address_hash = ?", (addr_hash,))
     row = cur.fetchone()
     return (row[0], row[1]) if row else None
 
 
 def _cache_coords(conn: sqlite3.Connection, address: str, lat: float, lng: float) -> None:
+    addr_hash = _hash_address(address)
     conn.execute(
-        "INSERT OR REPLACE INTO geocache (address, lat, lng) VALUES (?, ?, ?)",
-        (address.strip(), lat, lng),
+        "INSERT OR REPLACE INTO geocache (address_hash, lat, lng) VALUES (?, ?, ?)",
+        (addr_hash, lat, lng),
     )
     conn.commit()
+
+
+def clear_geocache() -> int:
+    """Delete all cached address data. Returns number of rows deleted."""
+    if not AppConfig.GEOCACHE_DB.exists():
+        return 0
+    try:
+        conn = sqlite3.connect(str(AppConfig.GEOCACHE_DB))
+        cur = conn.execute("SELECT COUNT(*) FROM geocache")
+        count = cur.fetchone()[0]
+        conn.execute("DELETE FROM geocache")
+        conn.commit()
+        conn.close()
+        return count
+    except sqlite3.OperationalError:
+        return 0
 
 
 def _geocode_one(address: str, api_key: str, log_fn) -> Optional[Tuple[float, float]]:
