@@ -6,6 +6,7 @@ File inputs, verification logic, and action buttons.
 from pathlib import Path
 
 from PySide6.QtWidgets import (
+    QLayout,
     QMainWindow,
     QWidget,
     QVBoxLayout,
@@ -21,6 +22,7 @@ from PySide6.QtWidgets import (
     QScrollArea,
     QComboBox,
     QFrame,
+    QSizePolicy,
 )
 from PySide6.QtGui import QFont
 from datetime import datetime
@@ -28,6 +30,7 @@ from PySide6.QtCore import Qt, Signal, QObject, QThread
 
 from config import AppConfig, Styles
 from windows import CustomerListMapWindow, RoutesMapWindow, RuleEditorWindow
+from routines import RoutinesWindow
 from utils import (
     extract_pdf_data,
     validate_address_columns,
@@ -41,6 +44,8 @@ from utils import (
     get_route_color_rules,
     save_route_color_rules,
     save_config_updates,
+    get_routines_folder,
+    save_routines_folder,
     ROUTE_COLOR_PRESETS,
 )
 
@@ -56,6 +61,13 @@ def _is_valid_path(path: str, extensions: set[str]) -> bool:
         return False
     p = Path(path.strip())
     return p.exists() and p.suffix.lower() in extensions
+
+
+def _browse_routines_folder(edit: QLineEdit) -> None:
+    """Open folder dialog for Routines folder."""
+    folder = QFileDialog.getExistingDirectory(None, "Select Routines Folder", edit.text() or str(Path.home()))
+    if folder:
+        edit.setText(folder)
 
 
 # =============================================================================
@@ -129,9 +141,22 @@ class Dashboard(QMainWindow):
         self._address_path_in_progress = None
         self._route_path_in_progress = None
 
-        central = QWidget()
-        self.setCentralWidget(central)
-        layout = QVBoxLayout(central)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
+
+        content = QWidget()
+        content.setMinimumSize(600, 900)
+        content.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+        layout = QVBoxLayout(content)
+        layout.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
+        layout.setSpacing(16)
+        scroll.setWidget(content)
+
+        self.setCentralWidget(scroll)
 
         # --- Top bar: spacer + Settings link ---
         top_bar = QHBoxLayout()
@@ -140,7 +165,7 @@ class Dashboard(QMainWindow):
         btn_settings.setFlat(True)
         btn_settings.setCursor(Qt.CursorShape.PointingHandCursor)
         btn_settings.setStyleSheet(
-            "QPushButton { background: transparent; border: none; color: #605e5c; font-size: 10pt; padding: 4px 8px; } "
+            "QPushButton { background: transparent; border: none; color: #605e5c; font-size: 9pt; padding: 4px 8px; } "
             "QPushButton:hover { color: #0078d4; }"
         )
         btn_settings.setToolTip("Settings")
@@ -151,10 +176,12 @@ class Dashboard(QMainWindow):
         # --- Address Source section ---
         addr_group = QGroupBox("Address Source")
         addr_layout = QVBoxLayout(addr_group)
+        addr_layout.setSpacing(12)
 
         addr_row = QHBoxLayout()
         addr_row.addWidget(QLabel("PDF file:"))
         self._address_edit = QLineEdit()
+        self._address_edit.setMinimumHeight(40)
         self._address_edit.setPlaceholderText("Select PDF file...")
         self._address_edit.textChanged.connect(self._on_path_changed)
         addr_row.addWidget(self._address_edit)
@@ -165,16 +192,21 @@ class Dashboard(QMainWindow):
 
         self._btn_save_address_csv = QPushButton("Save Address CSV")
         self._btn_save_address_csv.setEnabled(False)
+        self._btn_save_address_csv.setMinimumHeight(40)
         self._btn_save_address_csv.clicked.connect(self._on_save_address_csv)
         addr_layout.addWidget(self._btn_save_address_csv)
+        addr_layout.addSpacing(8)
 
         self._btn_save_address_excel = QPushButton("Save Address Excel")
         self._btn_save_address_excel.setEnabled(False)
+        self._btn_save_address_excel.setMinimumHeight(40)
         self._btn_save_address_excel.clicked.connect(self._on_save_address_excel)
         addr_layout.addWidget(self._btn_save_address_excel)
+        addr_layout.addSpacing(8)
 
         self._btn_customer_map = QPushButton("Show Customer List on Map")
         self._btn_customer_map.setEnabled(False)
+        self._btn_customer_map.setMinimumHeight(40)
         self._btn_customer_map.clicked.connect(self._on_show_customer_map)
         addr_layout.addWidget(self._btn_customer_map)
 
@@ -183,10 +215,12 @@ class Dashboard(QMainWindow):
         # --- Route Data section ---
         route_group = QGroupBox("Route Data")
         route_layout = QVBoxLayout(route_group)
+        route_layout.setSpacing(12)
 
         route_row = QHBoxLayout()
         route_row.addWidget(QLabel("Excel file:"))
         self._route_edit = QLineEdit()
+        self._route_edit.setMinimumHeight(40)
         self._route_edit.setPlaceholderText("Select Excel file...")
         self._route_edit.textChanged.connect(self._on_path_changed)
         route_row.addWidget(self._route_edit)
@@ -197,24 +231,42 @@ class Dashboard(QMainWindow):
 
         self._btn_save_route_csv = QPushButton("Save Route CSV")
         self._btn_save_route_csv.setEnabled(False)
+        self._btn_save_route_csv.setMinimumHeight(40)
         self._btn_save_route_csv.clicked.connect(self._on_save_route_csv)
         route_layout.addWidget(self._btn_save_route_csv)
+        route_layout.addSpacing(8)
 
         self._btn_save_route_excel = QPushButton("Save Route Excel")
         self._btn_save_route_excel.setEnabled(False)
+        self._btn_save_route_excel.setMinimumHeight(40)
         self._btn_save_route_excel.clicked.connect(self._on_save_route_excel)
         route_layout.addWidget(self._btn_save_route_excel)
+        route_layout.addSpacing(8)
 
         self._btn_routes_map = QPushButton("Show Routes on Map")
         self._btn_routes_map.setEnabled(False)
+        self._btn_routes_map.setMinimumHeight(40)
         self._btn_routes_map.clicked.connect(self._on_show_routes_map)
         route_layout.addWidget(self._btn_routes_map)
+        route_layout.addSpacing(8)
 
         btn_edit_rules = QPushButton("Edit route rules")
+        btn_edit_rules.setMinimumHeight(40)
         btn_edit_rules.clicked.connect(self._on_edit_rules)
         route_layout.addWidget(btn_edit_rules)
 
         layout.addWidget(route_group)
+
+        # --- Apps section ---
+        apps_group = QGroupBox("Apps")
+        apps_layout = QVBoxLayout(apps_group)
+        apps_layout.setSpacing(8)
+        btn_routines = QPushButton("Routines")
+        btn_routines.setMinimumHeight(40)
+        btn_routines.setToolTip("Markdown viewer and editor")
+        btn_routines.clicked.connect(self._on_routines)
+        apps_layout.addWidget(btn_routines)
+        layout.addWidget(apps_group)
 
         # --- Status console (colored output) ---
         status_group = QGroupBox("Status")
@@ -222,7 +274,7 @@ class Dashboard(QMainWindow):
         self._status_console = QTextEdit()
         self._status_console.setReadOnly(True)
         self._status_console.setMinimumHeight(120)
-        self._status_console.setFont(QFont("Consolas", 10))
+        self._status_console.setFont(QFont("Consolas", 9))
         self._status_console.setStyleSheet(
             "background-color: #1e1e1e; color: #d4d4d4; "
             "border: 1px solid #3b3a39; border-radius: 8px; "
@@ -441,6 +493,16 @@ class Dashboard(QMainWindow):
         win = RuleEditorWindow(self)
         win.show()
 
+    def _on_routines(self) -> None:
+        folder = get_routines_folder()
+        if not folder or not Path(folder).exists():
+            self.log("Routines: Set folder in Settings first.", "warn")
+            self._on_settings()
+            return
+        self.log("Opening Routines...", "info")
+        win = RoutinesWindow(self, log_fn=self.log)
+        win.show()
+
     def _on_settings(self) -> None:
         """Open Settings dialog (default address, location name, route colors, etc.)."""
         dlg = QDialog(self)
@@ -459,6 +521,17 @@ class Dashboard(QMainWindow):
         name_edit.setText(get_default_location_name())
         name_edit.setPlaceholderText("e.g. Kontor")
         layout.addWidget(name_edit)
+
+        routines_row = QHBoxLayout()
+        routines_row.addWidget(QLabel("Routines folder (markdown files):"))
+        routines_edit = QLineEdit()
+        routines_edit.setText(get_routines_folder())
+        routines_edit.setPlaceholderText("e.g. C:\\Users\\Me\\Routines")
+        routines_row.addWidget(routines_edit)
+        btn_browse_routines = QPushButton("Browse")
+        btn_browse_routines.clicked.connect(lambda: _browse_routines_folder(routines_edit))
+        routines_row.addWidget(btn_browse_routines)
+        layout.addLayout(routines_row)
 
         # Route color rules
         color_group = QGroupBox("Route colors")
@@ -549,6 +622,7 @@ class Dashboard(QMainWindow):
                 updates["default_location_name"] = name_edit.text().strip()
             if updates:
                 save_config_updates(updates)
+            save_routines_folder(routines_edit.text().strip())
             rules = []
             for _, color_combo, contains_edit in rule_rows:
                 contains = contains_edit.text().strip()

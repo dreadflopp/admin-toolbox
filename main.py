@@ -33,7 +33,7 @@ def main() -> int:
     Styles.apply(app, dark_mode=False)
 
     # Set default font (avoid Segoe UI Variable - can cause QFont::setPointSize -1 errors on Qt)
-    font = QFont("Segoe UI", 10)
+    font = QFont("Segoe UI", 9)
     app.setFont(font)
 
     # Main window
