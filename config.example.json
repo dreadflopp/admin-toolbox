@@ -3,6 +3,7 @@
   "disable_webengine_map": false,
   "prefer_leaflet_map": false,
   "default_route_address": "Angereds Torg 5, 42465 Angered",
+  "routines_folder": "",
   "route_rules": [
     {
       "type": "fill_default_address",

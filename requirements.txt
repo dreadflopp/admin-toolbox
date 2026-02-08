@@ -13,3 +13,6 @@ pdfplumber>=0.10.0
 
 # Geocoding (for map pins)
 geopy>=2.4.0
+
+# Markdown (for Routines app)
+markdown>=3.5.0
