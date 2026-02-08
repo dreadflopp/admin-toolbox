@@ -29,11 +29,12 @@ def main() -> int:
     )
     app = QApplication(sys.argv)
 
-    # Apply Windows 11 Fluent-style QSS
+    # Apply Windows 11 Fluent-style QSS (includes DPI-scaled font)
     Styles.apply(app, dark_mode=False)
 
-    # Set default font (avoid Segoe UI Variable - can cause QFont::setPointSize -1 errors on Qt)
-    font = QFont("Segoe UI", 9)
+    # Set default font — matches Styles._base_font_pt for consistency
+    font_pt = Styles._base_font_pt(app)
+    font = QFont("Segoe UI", font_pt)
     app.setFont(font)
 
     # Main window
