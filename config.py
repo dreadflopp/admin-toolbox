@@ -200,6 +200,13 @@ class Styles:
                     padding: 0 6px;
                     background-color: #202020;
                 }}
+                QTableWidget::item {{
+                    selection-background-color: #1e3a5f;
+                    selection-color: #f3f3f3;
+                }}
+                QTableWidget::item:hover {{
+                    background-color: #2d3e50;
+                }}
                 QScrollArea {{
                     border: none;
                     background-color: transparent;
@@ -301,6 +308,13 @@ class Styles:
                 left: 12px;
                 padding: 0 6px;
                 background-color: #fafafa;
+            }}
+            QTableWidget::item {{
+                selection-background-color: #bbdefb;
+                selection-color: #323130;
+            }}
+            QTableWidget::item:hover {{
+                background-color: #e3f2fd;
             }}
             QScrollArea {{
                 border: none;
