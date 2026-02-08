@@ -18,6 +18,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QDialog,
     QDialogButtonBox,
+    QMessageBox,
     QScrollArea,
     QComboBox,
     QFrame,
@@ -46,6 +47,7 @@ from utils import (
     save_config_updates,
     get_routines_folder,
     save_routines_folder,
+    clear_geocache,
     ROUTE_COLOR_PRESETS,
 )
 
@@ -515,6 +517,23 @@ class Dashboard(QMainWindow):
         win = RoutinesWindow(self, log_fn=self.log)
         win.show()
 
+    def _on_clear_geocache(self, parent: QWidget) -> None:
+        """Delete all cached address data after confirmation."""
+        if (
+            QMessageBox.question(
+                parent,
+                "Delete cached data",
+                "Delete all cached address data? Addresses will be re-geocoded when you next open a map.",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+            != QMessageBox.StandardButton.Yes
+        ):
+            return
+        count = clear_geocache()
+        QMessageBox.information(parent, "Deleted", f"Deleted {count} cached address entries.")
+        self.log(f"Cached address data cleared ({count} entries).", "info")
+
     def _on_settings(self) -> None:
         """Open Settings dialog (default address, location name, route colors, etc.)."""
         dlg = QDialog(self)
@@ -618,6 +637,15 @@ class Dashboard(QMainWindow):
         scroll.setMinimumHeight(120)
         color_layout.addWidget(scroll, 1)  # stretch=1 so list grows when window grows
         layout.addWidget(color_group, 1)  # stretch=1 so group (and scroll) grows when dialog grows
+
+        # Delete cached address data (geocache)
+        data_group = QGroupBox("Data")
+        data_layout = QVBoxLayout(data_group)
+        data_layout.addWidget(QLabel("Cached geocoded addresses are stored locally. Delete to remove all cached data."))
+        btn_clear_geocache = QPushButton("Delete cached address data")
+        btn_clear_geocache.clicked.connect(lambda: self._on_clear_geocache(dlg))
+        data_layout.addWidget(btn_clear_geocache)
+        layout.addWidget(data_group)
 
         btns = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
