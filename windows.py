@@ -184,7 +184,7 @@ class CustomerListMapWindow(QMainWindow):
             ))
             splitter.addWidget(placeholder)
 
-        splitter.setSizes([350, 650])
+        splitter.setSizes([400, 600])
         layout.addWidget(splitter)
 
         self._log("Customer List Map: Geocoding addresses...", "info")
@@ -220,9 +220,18 @@ class CustomerListMapWindow(QMainWindow):
                 self._table.setItem(i, j, item)
 
         hh = self._table.horizontalHeader()
-        for c in range(len(cols)):
-            hh.setSectionResizeMode(c, QHeaderView.ResizeMode.Interactive)
-        self._table.resizeColumnsToContents()
+        if len(cols) >= 4:
+            hh.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
+            hh.setSectionResizeMode(1, QHeaderView.ResizeMode.Interactive)
+            hh.setSectionResizeMode(2, QHeaderView.ResizeMode.Interactive)
+            hh.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
+            hh.resizeSection(0, 50)
+            hh.resizeSection(1, 90)
+            hh.resizeSection(2, 90)
+            hh.resizeSection(3, 220)
+        else:
+            for c in range(len(cols)):
+                hh.setSectionResizeMode(c, QHeaderView.ResizeMode.Interactive)
         self._table.setSortingEnabled(True)
 
     def _on_render_process_terminated(self, status, exit_code: int) -> None:
@@ -764,7 +773,7 @@ class RoutesMapWindow(QMainWindow):
             pl_layout.addWidget(QLabel("Install pyside6-addons for map display"))
             splitter.addWidget(pl)
 
-        splitter.setSizes([380, 750])
+        splitter.setSizes([420, 780])
         layout.addWidget(splitter)
 
         self._populate_routes_list()
@@ -818,8 +827,12 @@ class RoutesMapWindow(QMainWindow):
                 table.setHorizontalHeaderLabels(["Time", "Address", "Name"])
                 table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
                 hh = table.horizontalHeader()
-                for c in range(3):
-                    hh.setSectionResizeMode(c, QHeaderView.ResizeMode.Interactive)
+                hh.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
+                hh.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+                hh.setSectionResizeMode(2, QHeaderView.ResizeMode.Interactive)
+                hh.resizeSection(0, 55)
+                hh.resizeSection(1, 180)
+                hh.resizeSection(2, 100)
                 table.setRowCount(len(trip_visits))
                 table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
                 table.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)

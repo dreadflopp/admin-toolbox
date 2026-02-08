@@ -25,8 +25,8 @@ from PySide6.QtWidgets import (
     QColorDialog,
     QMenu,
 )
-from PySide6.QtCore import Qt, QTimer, QEvent, QObject
-from PySide6.QtGui import QFont, QColor, QIcon, QPixmap, QPainter
+from PySide6.QtCore import Qt, QTimer, QEvent, QObject, QSize
+from PySide6.QtGui import QFont, QColor, QIcon, QImage, QPixmap, QPainter
 
 from config import Styles, AppConfig
 from utils import (
@@ -201,24 +201,55 @@ class RoutinesWindow(QMainWindow):
 
         # --- Above markdown pane: Zoom buttons (left) | Default (right) ---
         top_row = QHBoxLayout()
+        zoom_icon_size = 24
+        m, w = 5, 2  # margin and bar width, like new routine button
+        # Use QImage with alpha for reliable transparency across platforms
+        def _make_plus_icon() -> QIcon:
+            img = QImage(zoom_icon_size, zoom_icon_size, QImage.Format.Format_ARGB32)
+            img.fill(QColor(0, 0, 0, 0))
+            painter = QPainter(img)
+            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(QColor("#333333"))
+            painter.drawRect(11, m, w, zoom_icon_size - 2 * m)
+            painter.drawRect(m, 11, zoom_icon_size - 2 * m, w)
+            painter.end()
+            return QIcon(QPixmap.fromImage(img))
+
+        def _make_minus_icon() -> QIcon:
+            img = QImage(zoom_icon_size, zoom_icon_size, QImage.Format.Format_ARGB32)
+            img.fill(QColor(0, 0, 0, 0))
+            painter = QPainter(img)
+            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(QColor("#333333"))
+            painter.drawRect(m, 11, zoom_icon_size - 2 * m, w)
+            painter.end()
+            return QIcon(QPixmap.fromImage(img))
+
+        icon_plus = _make_plus_icon()
+        icon_minus = _make_minus_icon()
         zoom_btn_style = (
-            "QPushButton { background-color: #e1e1e1; color: #1a1a1a; border: 1px solid #ccc; "
-            "border-radius: 6px; font-size: 14pt; font-weight: bold; min-width: 36px; } "
-            "QPushButton:hover { background-color: #d0d0d0; } "
-            "QPushButton:pressed { background-color: #c0c0c0; }"
+            "QPushButton { background-color: transparent; border: 2px solid transparent; border-radius: 8px; } "
+            "QPushButton:hover { background-color: #e8f0fe; border: 2px solid #0066cc; } "
+            "QPushButton:pressed { background-color: #d0e0fc; }"
         )
-        btn_zoom_out = QPushButton("−")
-        btn_zoom_out.setFixedSize(36, 32)
-        btn_zoom_out.setStyleSheet(zoom_btn_style)
-        btn_zoom_out.setToolTip("Zoom out")
-        btn_zoom_out.clicked.connect(self._zoom_out)
-        top_row.addWidget(btn_zoom_out)
-        btn_zoom_in = QPushButton("+")
-        btn_zoom_in.setFixedSize(36, 32)
-        btn_zoom_in.setStyleSheet(zoom_btn_style)
+        btn_zoom_in = QPushButton()
+        btn_zoom_in.setIcon(icon_plus)
+        btn_zoom_in.setIconSize(QSize(zoom_icon_size, zoom_icon_size))
+        btn_zoom_in.setFixedSize(32, 32)
         btn_zoom_in.setToolTip("Zoom in")
+        btn_zoom_in.setStyleSheet(zoom_btn_style)
         btn_zoom_in.clicked.connect(self._zoom_in)
         top_row.addWidget(btn_zoom_in)
+        btn_zoom_out = QPushButton()
+        btn_zoom_out.setIcon(icon_minus)
+        btn_zoom_out.setIconSize(QSize(zoom_icon_size, zoom_icon_size))
+        btn_zoom_out.setFixedSize(32, 32)
+        btn_zoom_out.setToolTip("Zoom out")
+        btn_zoom_out.setStyleSheet(zoom_btn_style)
+        btn_zoom_out.clicked.connect(self._zoom_out)
+        top_row.addWidget(btn_zoom_out)
         top_row.addStretch()
         self._btn_default = QPushButton("Default")
         self._btn_default.setStyleSheet("QPushButton { background-color: #9e9e9e; color: white; }")
