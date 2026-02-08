@@ -6,7 +6,6 @@ File inputs, verification logic, and action buttons.
 from pathlib import Path
 
 from PySide6.QtWidgets import (
-    QLayout,
     QMainWindow,
     QWidget,
     QVBoxLayout,
@@ -23,6 +22,7 @@ from PySide6.QtWidgets import (
     QComboBox,
     QFrame,
     QSizePolicy,
+    QSplitter,
 )
 from PySide6.QtGui import QFont
 from datetime import datetime
@@ -141,139 +141,143 @@ class Dashboard(QMainWindow):
         self._address_path_in_progress = None
         self._route_path_in_progress = None
 
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        scroll.setFrameShape(QFrame.Shape.NoFrame)
-        scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
+        # Compact sizes (scale-friendly)
+        btn_height = 32
+        input_height = 32
+        layout_spacing = 10
+        group_spacing = 8
 
         content = QWidget()
-        content.setMinimumSize(600, 900)
-        content.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
-        layout = QVBoxLayout(content)
-        layout.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
-        layout.setSpacing(16)
-        scroll.setWidget(content)
+        content.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        main_layout = QVBoxLayout(content)
+        main_layout.setSpacing(layout_spacing)
+        main_layout.setContentsMargins(12, 12, 12, 12)
 
-        self.setCentralWidget(scroll)
+        # --- Two-column layout ---
+        splitter = QSplitter(Qt.Orientation.Horizontal)
 
-        # --- Top bar: spacer + Settings link ---
-        top_bar = QHBoxLayout()
-        top_bar.addStretch()
-        btn_settings = QPushButton("Settings")
-        btn_settings.setFlat(True)
-        btn_settings.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn_settings.setStyleSheet(
-            "QPushButton { background: transparent; border: none; color: #605e5c; font-size: 9pt; padding: 4px 8px; } "
-            "QPushButton:hover { color: #0078d4; }"
-        )
-        btn_settings.setToolTip("Settings")
-        btn_settings.clicked.connect(self._on_settings)
-        top_bar.addWidget(btn_settings)
-        layout.addLayout(top_bar)
+        # --- Left column: Address Source + Tools ---
+        left_column = QWidget()
+        left_layout = QVBoxLayout(left_column)
+        left_layout.setSpacing(layout_spacing)
+        left_layout.setContentsMargins(0, 0, 0, 0)
 
-        # --- Address Source section ---
         addr_group = QGroupBox("Address Source")
         addr_layout = QVBoxLayout(addr_group)
-        addr_layout.setSpacing(12)
+        addr_layout.setSpacing(group_spacing)
 
         addr_row = QHBoxLayout()
         addr_row.addWidget(QLabel("PDF file:"))
         self._address_edit = QLineEdit()
-        self._address_edit.setMinimumHeight(40)
+        self._address_edit.setObjectName("filePath")
+        self._address_edit.setMinimumHeight(input_height)
         self._address_edit.setPlaceholderText("Select PDF file...")
         self._address_edit.textChanged.connect(self._on_path_changed)
         addr_row.addWidget(self._address_edit)
         btn_browse_addr = QPushButton("Browse")
+        btn_browse_addr.setMinimumHeight(btn_height)
         btn_browse_addr.clicked.connect(self._browse_address)
         addr_row.addWidget(btn_browse_addr)
         addr_layout.addLayout(addr_row)
 
-        self._btn_save_address_csv = QPushButton("Save Address CSV")
+        addr_actions = QHBoxLayout()
+        addr_actions.setSpacing(8)
+        self._btn_save_address_csv = QPushButton("Save CSV")
+        self._btn_save_address_csv.setObjectName("secondary")
         self._btn_save_address_csv.setEnabled(False)
-        self._btn_save_address_csv.setMinimumHeight(40)
+        self._btn_save_address_csv.setMinimumHeight(btn_height)
         self._btn_save_address_csv.clicked.connect(self._on_save_address_csv)
-        addr_layout.addWidget(self._btn_save_address_csv)
-        addr_layout.addSpacing(8)
-
-        self._btn_save_address_excel = QPushButton("Save Address Excel")
+        addr_actions.addWidget(self._btn_save_address_csv)
+        self._btn_save_address_excel = QPushButton("Save Excel")
+        self._btn_save_address_excel.setObjectName("secondary")
         self._btn_save_address_excel.setEnabled(False)
-        self._btn_save_address_excel.setMinimumHeight(40)
+        self._btn_save_address_excel.setMinimumHeight(btn_height)
         self._btn_save_address_excel.clicked.connect(self._on_save_address_excel)
-        addr_layout.addWidget(self._btn_save_address_excel)
-        addr_layout.addSpacing(8)
-
-        self._btn_customer_map = QPushButton("Show Customer List on Map")
+        addr_actions.addWidget(self._btn_save_address_excel)
+        self._btn_customer_map = QPushButton("Show on Map")
         self._btn_customer_map.setEnabled(False)
-        self._btn_customer_map.setMinimumHeight(40)
+        self._btn_customer_map.setMinimumHeight(btn_height)
         self._btn_customer_map.clicked.connect(self._on_show_customer_map)
-        addr_layout.addWidget(self._btn_customer_map)
+        addr_actions.addWidget(self._btn_customer_map)
+        addr_layout.addLayout(addr_actions)
 
-        layout.addWidget(addr_group)
+        left_layout.addWidget(addr_group)
 
-        # --- Route Data section ---
+        tools_group = QGroupBox("Tools")
+        tools_layout = QHBoxLayout(tools_group)
+        tools_layout.setSpacing(8)
+        btn_routines = QPushButton("Routines")
+        btn_routines.setMinimumHeight(btn_height)
+        btn_routines.setToolTip("Markdown viewer and editor")
+        btn_routines.clicked.connect(self._on_routines)
+        tools_layout.addWidget(btn_routines)
+        btn_settings_tools = QPushButton("Settings")
+        btn_settings_tools.setObjectName("tertiary")
+        btn_settings_tools.setMinimumHeight(btn_height)
+        btn_settings_tools.clicked.connect(self._on_settings)
+        tools_layout.addWidget(btn_settings_tools)
+        left_layout.addWidget(tools_group)
+
+        left_layout.addStretch()
+        splitter.addWidget(left_column)
+
+        # --- Right column: Route Data + Status ---
+        right_column = QWidget()
+        right_layout = QVBoxLayout(right_column)
+        right_layout.setSpacing(layout_spacing)
+        right_layout.setContentsMargins(0, 0, 0, 0)
+
         route_group = QGroupBox("Route Data")
         route_layout = QVBoxLayout(route_group)
-        route_layout.setSpacing(12)
+        route_layout.setSpacing(group_spacing)
 
         route_row = QHBoxLayout()
         route_row.addWidget(QLabel("Excel file:"))
         self._route_edit = QLineEdit()
-        self._route_edit.setMinimumHeight(40)
+        self._route_edit.setObjectName("filePath")
+        self._route_edit.setMinimumHeight(input_height)
         self._route_edit.setPlaceholderText("Select Excel file...")
         self._route_edit.textChanged.connect(self._on_path_changed)
         route_row.addWidget(self._route_edit)
         btn_browse_route = QPushButton("Browse")
+        btn_browse_route.setMinimumHeight(btn_height)
         btn_browse_route.clicked.connect(self._browse_route)
         route_row.addWidget(btn_browse_route)
         route_layout.addLayout(route_row)
 
-        self._btn_save_route_csv = QPushButton("Save Route CSV")
+        route_actions = QHBoxLayout()
+        route_actions.setSpacing(8)
+        self._btn_save_route_csv = QPushButton("Save CSV")
+        self._btn_save_route_csv.setObjectName("secondary")
         self._btn_save_route_csv.setEnabled(False)
-        self._btn_save_route_csv.setMinimumHeight(40)
+        self._btn_save_route_csv.setMinimumHeight(btn_height)
         self._btn_save_route_csv.clicked.connect(self._on_save_route_csv)
-        route_layout.addWidget(self._btn_save_route_csv)
-        route_layout.addSpacing(8)
-
-        self._btn_save_route_excel = QPushButton("Save Route Excel")
+        route_actions.addWidget(self._btn_save_route_csv)
+        self._btn_save_route_excel = QPushButton("Save Excel")
+        self._btn_save_route_excel.setObjectName("secondary")
         self._btn_save_route_excel.setEnabled(False)
-        self._btn_save_route_excel.setMinimumHeight(40)
+        self._btn_save_route_excel.setMinimumHeight(btn_height)
         self._btn_save_route_excel.clicked.connect(self._on_save_route_excel)
-        route_layout.addWidget(self._btn_save_route_excel)
-        route_layout.addSpacing(8)
-
-        self._btn_routes_map = QPushButton("Show Routes on Map")
+        route_actions.addWidget(self._btn_save_route_excel)
+        self._btn_routes_map = QPushButton("Show on Map")
         self._btn_routes_map.setEnabled(False)
-        self._btn_routes_map.setMinimumHeight(40)
+        self._btn_routes_map.setMinimumHeight(btn_height)
         self._btn_routes_map.clicked.connect(self._on_show_routes_map)
-        route_layout.addWidget(self._btn_routes_map)
-        route_layout.addSpacing(8)
-
-        btn_edit_rules = QPushButton("Edit route rules")
-        btn_edit_rules.setMinimumHeight(40)
+        route_actions.addWidget(self._btn_routes_map)
+        btn_edit_rules = QPushButton("Edit rules")
+        btn_edit_rules.setObjectName("tertiary")
+        btn_edit_rules.setMinimumHeight(btn_height)
         btn_edit_rules.clicked.connect(self._on_edit_rules)
-        route_layout.addWidget(btn_edit_rules)
+        route_actions.addWidget(btn_edit_rules)
+        route_layout.addLayout(route_actions)
 
-        layout.addWidget(route_group)
+        right_layout.addWidget(route_group)
 
-        # --- Apps section ---
-        apps_group = QGroupBox("Apps")
-        apps_layout = QVBoxLayout(apps_group)
-        apps_layout.setSpacing(8)
-        btn_routines = QPushButton("Routines")
-        btn_routines.setMinimumHeight(40)
-        btn_routines.setToolTip("Markdown viewer and editor")
-        btn_routines.clicked.connect(self._on_routines)
-        apps_layout.addWidget(btn_routines)
-        layout.addWidget(apps_group)
-
-        # --- Status console (colored output) ---
         status_group = QGroupBox("Status")
         status_layout = QVBoxLayout(status_group)
         self._status_console = QTextEdit()
         self._status_console.setReadOnly(True)
-        self._status_console.setMinimumHeight(120)
+        self._status_console.setMinimumHeight(100)
         self._status_console.setFont(QFont("Consolas", 9))
         self._status_console.setStyleSheet(
             "background-color: #1e1e1e; color: #d4d4d4; "
@@ -282,7 +286,15 @@ class Dashboard(QMainWindow):
         )
         self._status_console.setPlaceholderText("Ready. Select files to begin.")
         status_layout.addWidget(self._status_console)
-        layout.addWidget(status_group)
+        right_layout.addWidget(status_group, 1)
+
+        splitter.addWidget(right_column)
+        splitter.setSizes([350, 450])
+        splitter.setStretchFactor(0, 0)
+        splitter.setStretchFactor(1, 1)
+
+        main_layout.addWidget(splitter)
+        self.setCentralWidget(content)
 
         # Initial state
         self.log("Application started.", "info")
