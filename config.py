@@ -92,7 +92,7 @@ class Styles:
     MAIN_STYLE = f"""
         QWidget {{
             font-family: {FONT_FAMILY};
-            font-size: 11pt;
+            font-size: 9pt;
         }}
         QMainWindow {{
             background-color: #f3f3f3;
@@ -162,7 +162,7 @@ class Styles:
     DARK_MAIN_STYLE = f"""
         QWidget {{
             font-family: {FONT_FAMILY};
-            font-size: 11pt;
+            font-size: 9pt;
         }}
         QMainWindow {{
             background-color: #202020;
