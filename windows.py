@@ -1117,20 +1117,6 @@ class RoutesMapWindow(QMainWindow):
 
         _btn_grey = "QPushButton#secondary { font-size: 9pt; padding: 2px 6px; min-width: 0; }"
         sel_row = QHBoxLayout()
-        btn_select_all = QPushButton("Select all")
-        btn_select_all.setObjectName("secondary")
-        btn_select_all.setFlat(True)
-        btn_select_all.setStyleSheet(_btn_grey)
-        btn_select_all.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        btn_select_all.setFixedWidth(btn_select_all.fontMetrics().horizontalAdvance("Select all") + 14)
-        btn_select_all.clicked.connect(self._on_select_all)
-        btn_deselect_all = QPushButton("Deselect all")
-        btn_deselect_all.setObjectName("secondary")
-        btn_deselect_all.setFlat(True)
-        btn_deselect_all.setStyleSheet(_btn_grey)
-        btn_deselect_all.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        btn_deselect_all.setFixedWidth(btn_deselect_all.fontMetrics().horizontalAdvance("Deselect all") + 14)
-        btn_deselect_all.clicked.connect(self._on_deselect_all)
         btn_expand_all = QPushButton("Expand all")
         btn_expand_all.setObjectName("secondary")
         btn_expand_all.setFlat(True)
@@ -1145,16 +1131,14 @@ class RoutesMapWindow(QMainWindow):
         btn_collapse_all.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         btn_collapse_all.setFixedWidth(btn_collapse_all.fontMetrics().horizontalAdvance("Collapse all") + 14)
         btn_collapse_all.clicked.connect(self._on_collapse_all)
-        sel_row.addWidget(btn_select_all)
-        sel_row.addWidget(btn_deselect_all)
         sel_row.addWidget(btn_expand_all)
         sel_row.addWidget(btn_collapse_all)
         sel_row.addSpacing(12)
         sel_row.addWidget(QLabel("Sort:"))
         self._sort_combo = QComboBox()
         self._sort_combo.addItem("By name", "name")
-        self._sort_combo.addItem("By start time", "time")
-        self._sort_combo.setStyleSheet("font-size: 9pt; min-width: 100px;")
+        self._sort_combo.addItem("By first trip", "time")
+        self._sort_combo.setStyleSheet("font-size: 9pt; min-width: 110px;")
         from utils import get_route_sort_order
         sort_order = get_route_sort_order()
         idx = self._sort_combo.findData(sort_order)
@@ -1538,18 +1522,6 @@ class RoutesMapWindow(QMainWindow):
         self._map_view.page().runJavaScript(
             f"moveToPin({m['lat']}, {m['lng']}); highlightPin({marker_id});"
         )
-
-    def _on_select_all(self) -> None:
-        for k in self._trip_visibility:
-            self._trip_visibility[k] = True
-        self._refresh_trip_checkboxes()
-        self._update_map_visibility()
-
-    def _on_deselect_all(self) -> None:
-        for k in self._trip_visibility:
-            self._trip_visibility[k] = False
-        self._refresh_trip_checkboxes()
-        self._update_map_visibility()
 
     def _on_expand_all(self) -> None:
         """Expand all route and trip sections."""
