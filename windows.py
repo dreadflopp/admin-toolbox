@@ -677,6 +677,7 @@ class CustomerListMapWindow(QMainWindow):
                 pass
 
     def closeEvent(self, event):
+        self._log("Customer List on Map closed.", "info")
         self._custom_addresses.clear_all()
         super().closeEvent(event)
 
@@ -853,9 +854,10 @@ def _rule_to_display(rule: dict) -> str:
 class RuleEditorWindow(QMainWindow):
     """Window to edit route data rules (fill address, remove rows)."""
 
-    def __init__(self, parent: QWidget | None = None):
+    def __init__(self, parent: QWidget | None = None, log_fn=None):
         super().__init__(parent)
         self.setWindowTitle("Route Rules Editor")
+        self._log = log_fn or (lambda msg, lvl="info": None)
         self.setMinimumSize(500, 400)
         self.setAttribute(Qt.WA_DeleteOnClose)
 
@@ -1015,7 +1017,12 @@ class RuleEditorWindow(QMainWindow):
     def _on_save(self) -> None:
         self._save_rules(self._rules)
         QMessageBox.information(self, "Saved", "Rules saved. They will apply when loading route data.")
+        self._log("Route rules saved.", "success")
         self.close()
+
+    def closeEvent(self, event):
+        self._log("Route Rules Editor closed.", "info")
+        super().closeEvent(event)
 
 
 class RoutesMapWindow(QMainWindow):
@@ -1040,7 +1047,11 @@ class RoutesMapWindow(QMainWindow):
         self._all_markers = []  # flat list of {lat, lng, label, address, route_key, visit_idx}
         self._use_google_map = False
 
-        from utils import build_routes_by_date, get_default_route_address, split_route_into_trips
+        from utils import (
+            build_routes_by_date,
+            get_default_route_address,
+            split_route_into_trips,
+        )
         default_addr = get_default_route_address()
         self._default_address = default_addr
         self._routes_by_date = build_routes_by_date(self._route_df, default_addr)
@@ -1106,20 +1117,6 @@ class RoutesMapWindow(QMainWindow):
 
         _btn_grey = "QPushButton#secondary { font-size: 9pt; padding: 2px 6px; min-width: 0; }"
         sel_row = QHBoxLayout()
-        btn_select_all = QPushButton("Select all")
-        btn_select_all.setObjectName("secondary")
-        btn_select_all.setFlat(True)
-        btn_select_all.setStyleSheet(_btn_grey)
-        btn_select_all.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        btn_select_all.setFixedWidth(btn_select_all.fontMetrics().horizontalAdvance("Select all") + 14)
-        btn_select_all.clicked.connect(self._on_select_all)
-        btn_deselect_all = QPushButton("Deselect all")
-        btn_deselect_all.setObjectName("secondary")
-        btn_deselect_all.setFlat(True)
-        btn_deselect_all.setStyleSheet(_btn_grey)
-        btn_deselect_all.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        btn_deselect_all.setFixedWidth(btn_deselect_all.fontMetrics().horizontalAdvance("Deselect all") + 14)
-        btn_deselect_all.clicked.connect(self._on_deselect_all)
         btn_expand_all = QPushButton("Expand all")
         btn_expand_all.setObjectName("secondary")
         btn_expand_all.setFlat(True)
@@ -1134,10 +1131,24 @@ class RoutesMapWindow(QMainWindow):
         btn_collapse_all.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         btn_collapse_all.setFixedWidth(btn_collapse_all.fontMetrics().horizontalAdvance("Collapse all") + 14)
         btn_collapse_all.clicked.connect(self._on_collapse_all)
-        sel_row.addWidget(btn_select_all)
-        sel_row.addWidget(btn_deselect_all)
         sel_row.addWidget(btn_expand_all)
         sel_row.addWidget(btn_collapse_all)
+        sel_row.addSpacing(12)
+        sel_row.addWidget(QLabel("Sort:"))
+        self._sort_combo = QComboBox()
+        self._sort_combo.addItem("By name", "name")
+        self._sort_combo.addItem("By first trip", "time")
+        self._sort_combo.setStyleSheet("font-size: 9pt; min-width: 110px;")
+        from utils import get_route_sort_order
+        sort_order = get_route_sort_order()
+        idx = self._sort_combo.findData(sort_order)
+        if idx >= 0:
+            self._sort_combo.blockSignals(True)
+            self._sort_combo.setCurrentIndex(idx)
+            self._sort_combo.blockSignals(False)
+        self._sort_combo.currentIndexChanged.connect(self._on_sort_changed)
+        sel_row.addWidget(self._sort_combo)
+        sel_row.addStretch()
         routes_container_layout.addLayout(sel_row)
 
         self._trip_buttons_widget = QWidget()
@@ -1203,6 +1214,23 @@ class RoutesMapWindow(QMainWindow):
     def _trip_key(self, date_str: str, slinga: str, trip_idx: int) -> str:
         return f"{date_str}|{slinga}|{trip_idx}"
 
+    def _get_trip_name_for_key(self, trip_key: str) -> str | None:
+        """Get trip name (morning/afternoon/evening) for a trip_key."""
+        parts = trip_key.split("|")
+        if len(parts) != 3:
+            return None
+        date_str, slinga, idx_str = parts
+        if not idx_str.isdigit():
+            return None
+        trip_idx = int(idx_str)
+        trips = self._routes_by_date_trips.get(date_str, {}).get(slinga, [])
+        if trip_idx >= len(trips):
+            return None
+        trip_item = trips[trip_idx]
+        if isinstance(trip_item, tuple) and len(trip_item) == 2:
+            return trip_item[0]
+        return None
+
     def _populate_routes_list(self) -> None:
         """Fill left panel with route groups, trips, and visit tables."""
         self._trip_tables.clear()
@@ -1219,19 +1247,20 @@ class RoutesMapWindow(QMainWindow):
 
         routes_trips = self._routes_by_date_trips[self._current_date]
         route_names = list(routes_trips.keys())
-        from utils import get_route_colors
+        from utils import get_route_colors, sort_routes_for_display, _get_trip_visits
         route_colors = get_route_colors(route_names)
-        for slinga, trips in sorted(routes_trips.items()):
+        for slinga, trips in sort_routes_for_display(routes_trips):
             color = route_colors.get(slinga, "#777777")
             route_section = CollapsibleSection(slinga, initial_expanded=False, header_color=color)
             self._route_sections[slinga] = route_section
             group_layout = route_section.content_layout()
-            for trip_idx, trip_visits in enumerate(trips):
+            for trip_idx, trip_item in enumerate(trips):
+                trip_name, trip_visits = (trip_item[0], trip_item[1]) if isinstance(trip_item, tuple) else (f"Trip {trip_idx + 1}", trip_item)
                 tk = self._trip_key(self._current_date, slinga, trip_idx)
                 visible = self._trip_visibility.get(tk, True)
                 self._trip_visibility[tk] = visible
 
-                trip_label = f"Trip {trip_idx + 1}" if len(trips) > 1 else "Show on map"
+                trip_label = trip_name if len(trips) > 1 else "Show on map"
                 cb = QCheckBox("Show on map")
                 cb.setChecked(visible)
                 cb.stateChanged.connect(lambda s, k=tk: self._on_trip_toggle(k, s == 2))
@@ -1290,7 +1319,9 @@ class RoutesMapWindow(QMainWindow):
         self._populate_trip_buttons()
 
     def _populate_trip_buttons(self) -> None:
-        """Build Trip 1, Trip 2, ... Select/Deselect buttons based on max trips."""
+        """Build Morning, Afternoon, Evening On/Off buttons."""
+        from utils import TRIP_NAMES
+
         while self._trip_buttons_layout.count():
             item = self._trip_buttons_layout.takeAt(0)
             if item.widget():
@@ -1299,16 +1330,12 @@ class RoutesMapWindow(QMainWindow):
         if not self._current_date or self._current_date not in self._routes_by_date_trips:
             return
 
-        routes_trips = self._routes_by_date_trips[self._current_date]
-        max_trips = max(len(trips) for trips in routes_trips.values()) if routes_trips else 0
-
         _btn_style = (
             "QPushButton#secondary { background-color: #edebe9; color: #323130; font-size: 8pt; padding: 2px 4px; min-width: 0; } "
             "QPushButton#secondary:hover { background-color: #d2d0ce; color: #323130; }"
         )
-        for trip_num in range(1, max_trips + 1):
-            trip_idx = trip_num - 1
-            lbl = QLabel(f"T{trip_num}:")
+        for trip_name in TRIP_NAMES:
+            lbl = QLabel(f"{trip_name.capitalize()}:")
             lbl.setStyleSheet("font-size: 8pt;")
             self._trip_buttons_layout.addWidget(lbl)
             btn_sel = QPushButton("On")
@@ -1316,31 +1343,29 @@ class RoutesMapWindow(QMainWindow):
             btn_sel.setFlat(True)
             btn_sel.setStyleSheet(_btn_style)
             btn_sel.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-            btn_sel.clicked.connect(lambda checked, idx=trip_idx: self._on_select_trip_n(idx))
+            btn_sel.clicked.connect(lambda checked, name=trip_name: self._on_select_trip_by_name(name))
             btn_desel = QPushButton("Off")
             btn_desel.setObjectName("secondary")
             btn_desel.setFlat(True)
             btn_desel.setStyleSheet(_btn_style)
             btn_desel.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-            btn_desel.clicked.connect(lambda checked, idx=trip_idx: self._on_deselect_trip_n(idx))
+            btn_desel.clicked.connect(lambda checked, name=trip_name: self._on_deselect_trip_by_name(name))
             self._trip_buttons_layout.addWidget(btn_sel)
             self._trip_buttons_layout.addWidget(btn_desel)
         self._trip_buttons_layout.addStretch()
 
-    def _on_select_trip_n(self, trip_idx: int) -> None:
-        """Select all trips with given index (0-based) across all routes."""
+    def _on_select_trip_by_name(self, trip_name: str) -> None:
+        """Turn on all trips with given name (morning/afternoon/evening) across all routes."""
         for tk in self._trip_visibility:
-            parts = tk.rsplit("|", 1)
-            if len(parts) == 2 and parts[1].isdigit() and int(parts[1]) == trip_idx:
+            if self._get_trip_name_for_key(tk) == trip_name:
                 self._trip_visibility[tk] = True
         self._refresh_trip_checkboxes()
         self._update_map_visibility()
 
-    def _on_deselect_trip_n(self, trip_idx: int) -> None:
-        """Deselect all trips with given index (0-based) across all routes."""
+    def _on_deselect_trip_by_name(self, trip_name: str) -> None:
+        """Turn off all trips with given name (morning/afternoon/evening) across all routes."""
         for tk in self._trip_visibility:
-            parts = tk.rsplit("|", 1)
-            if len(parts) == 2 and parts[1].isdigit() and int(parts[1]) == trip_idx:
+            if self._get_trip_name_for_key(tk) == trip_name:
                 self._trip_visibility[tk] = False
         self._refresh_trip_checkboxes()
         self._update_map_visibility()
@@ -1350,6 +1375,14 @@ class RoutesMapWindow(QMainWindow):
             self._current_date = self._dates[idx]
             self._populate_routes_list()
             self._update_map_visibility()
+
+    def _on_sort_changed(self, idx: int) -> None:
+        """Change route sort order and refresh the list."""
+        order = self._sort_combo.currentData()
+        if order:
+            from utils import save_route_sort_order
+            save_route_sort_order(order)
+            self._populate_routes_list()
 
     def _on_trip_toggle(self, trip_key: str, visible: bool) -> None:
         self._trip_visibility[trip_key] = visible
@@ -1377,6 +1410,7 @@ class RoutesMapWindow(QMainWindow):
                 pass
 
     def closeEvent(self, event):
+        self._log("Routes on Map closed.", "info")
         self._custom_addresses.clear_all()
         super().closeEvent(event)
 
@@ -1489,18 +1523,6 @@ class RoutesMapWindow(QMainWindow):
             f"moveToPin({m['lat']}, {m['lng']}); highlightPin({marker_id});"
         )
 
-    def _on_select_all(self) -> None:
-        for k in self._trip_visibility:
-            self._trip_visibility[k] = True
-        self._refresh_trip_checkboxes()
-        self._update_map_visibility()
-
-    def _on_deselect_all(self) -> None:
-        for k in self._trip_visibility:
-            self._trip_visibility[k] = False
-        self._refresh_trip_checkboxes()
-        self._update_map_visibility()
-
     def _on_expand_all(self) -> None:
         """Expand all route and trip sections."""
         for section in self._route_sections.values():
@@ -1549,11 +1571,13 @@ class RoutesMapWindow(QMainWindow):
             get_map_url,
         )
 
+        from utils import _get_trip_visits
         addresses = []
         self._visit_address_map = []  # [(date, slinga, trip_idx, visit_idx_in_trip, address)]
         for date_str, routes in self._routes_by_date_trips.items():
             for slinga, trips in routes.items():
-                for trip_idx, trip_visits in enumerate(trips):
+                for trip_idx, trip_item in enumerate(trips):
+                    trip_visits = _get_trip_visits(trip_item)
                     for i, v in enumerate(trip_visits):
                         addr = (v.get("adress") or "").strip()
                         if addr:
@@ -1634,7 +1658,9 @@ class RoutesMapWindow(QMainWindow):
                 continue
             lat, lng = addr_to_coords[addr]
             trips = self._routes_by_date_trips.get(date_str, {}).get(slinga, [])
-            trip_visits = trips[trip_idx] if trip_idx < len(trips) else []
+            trip_item = trips[trip_idx] if trip_idx < len(trips) else None
+            from utils import _get_trip_visits
+            trip_visits = _get_trip_visits(trip_item) if trip_item else []
             visit = trip_visits[visit_idx] if visit_idx < len(trip_visits) else {}
             raw_namn = visit.get("namn", addr[:30])
             s = str(raw_namn).strip().lower() if raw_namn is not None else ""
@@ -1691,11 +1717,13 @@ class RoutesMapWindow(QMainWindow):
                     self._markers_by_trip[tk] = []
                 self._markers_by_trip[tk].append(mid)
 
+            from utils import _get_trip_visits
             for date_str, routes in self._routes_by_date_trips.items():
                 if date_str != self._current_date:
                     continue
                 for slinga, trips in routes.items():
-                    for trip_idx, trip_visits in enumerate(trips):
+                    for trip_idx, trip_item in enumerate(trips):
+                        trip_visits = _get_trip_visits(trip_item)
                         tk = self._trip_key(date_str, slinga, trip_idx)
                         path = []
                         for v in trip_visits:

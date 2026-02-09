@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QScrollArea,
     QComboBox,
+    QCheckBox,
     QFrame,
     QSizePolicy,
     QSplitter,
@@ -48,6 +49,12 @@ from utils import (
     get_routines_folder,
     save_routines_folder,
     clear_geocache,
+    get_break_names,
+    get_break_lunch_window,
+    get_break_evening_window,
+    save_break_settings,
+    get_route_sort_order,
+    save_route_sort_order,
     ROUTE_COLOR_PRESETS,
 )
 
@@ -504,7 +511,8 @@ class Dashboard(QMainWindow):
         win.show()
 
     def _on_edit_rules(self) -> None:
-        win = RuleEditorWindow(self)
+        self.log("Opening Route Rules Editor...", "info")
+        win = RuleEditorWindow(self, log_fn=self.log)
         win.show()
 
     def _on_routines(self) -> None:
@@ -563,6 +571,48 @@ class Dashboard(QMainWindow):
         btn_browse_routines.clicked.connect(lambda: _browse_routines_folder(routines_edit))
         routines_row.addWidget(btn_browse_routines)
         layout.addLayout(routines_row)
+
+        # Break / schedule settings for route trip splitting (morning, afternoon, evening)
+        break_group = QGroupBox("Schedule breaks (for route trips)")
+        break_layout = QVBoxLayout(break_group)
+        break_layout.addWidget(
+            QLabel("Break names in schedule (semicolon-separated, case insensitive):")
+        )
+        break_names_edit = QLineEdit()
+        break_names_edit.setText("; ".join(get_break_names()))
+        break_names_edit.setPlaceholderText("e.g. RAST; RAST + 10 adm")
+        break_layout.addWidget(break_names_edit)
+        break_layout.addWidget(
+            QLabel("Lunch break (HH:MM-HH:MM):")
+        )
+        lunch_edit = QLineEdit()
+        lunch_start, lunch_end = get_break_lunch_window()
+        lunch_edit.setText(f"{lunch_start.strftime('%H:%M')}-{lunch_end.strftime('%H:%M')}")
+        lunch_edit.setPlaceholderText("e.g. 10:00-14:00")
+        break_layout.addWidget(lunch_edit)
+        break_layout.addWidget(
+            QLabel("Evening break (HH:MM-HH:MM):")
+        )
+        evening_edit = QLineEdit()
+        evening_start, evening_end = get_break_evening_window()
+        evening_edit.setText(f"{evening_start.strftime('%H:%M')}-{evening_end.strftime('%H:%M')}")
+        evening_edit.setPlaceholderText("e.g. 15:00-19:00")
+        break_layout.addWidget(evening_edit)
+        layout.addWidget(break_group)
+
+        # Route sort order
+        sort_group = QGroupBox("Route sorting")
+        sort_layout = QVBoxLayout(sort_group)
+        sort_layout.addWidget(QLabel("Sort routes by:"))
+        sort_combo = QComboBox()
+        sort_combo.addItem("Name", "name")
+        sort_combo.addItem("First trip type (morning/afternoon/evening, then by name)", "time")
+        sort_order = get_route_sort_order()
+        idx = sort_combo.findData(sort_order)
+        if idx >= 0:
+            sort_combo.setCurrentIndex(idx)
+        sort_layout.addWidget(sort_combo)
+        layout.addWidget(sort_group)
 
         # Route color rules
         color_group = QGroupBox("Route colors")
@@ -663,6 +713,12 @@ class Dashboard(QMainWindow):
             if updates:
                 save_config_updates(updates)
             save_routines_folder(routines_edit.text().strip())
+            save_break_settings(
+                break_names_edit.text().strip() or "RAST",
+                lunch_edit.text().strip() or "10:00-14:00",
+                evening_edit.text().strip() or "15:00-19:00",
+            )
+            save_route_sort_order(sort_combo.currentData() or "time")
             rules = []
             for _, color_combo, contains_edit in rule_rows:
                 contains = contains_edit.text().strip()
