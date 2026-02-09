@@ -605,8 +605,8 @@ class Dashboard(QMainWindow):
         sort_layout = QVBoxLayout(sort_group)
         sort_layout.addWidget(QLabel("Sort routes by:"))
         sort_combo = QComboBox()
-        sort_combo.addItem("Name (then by time of first visit)", "name")
-        sort_combo.addItem("Time of first visit (then by name)", "time")
+        sort_combo.addItem("Name", "name")
+        sort_combo.addItem("First trip type (morning/afternoon/evening, then by name)", "time")
         sort_order = get_route_sort_order()
         idx = sort_combo.findData(sort_order)
         if idx >= 0:
@@ -718,7 +718,7 @@ class Dashboard(QMainWindow):
                 lunch_edit.text().strip() or "10:00-14:00",
                 evening_edit.text().strip() or "15:00-19:00",
             )
-            save_route_sort_order(sort_combo.currentData() or "name")
+            save_route_sort_order(sort_combo.currentData() or "time")
             rules = []
             for _, color_combo, contains_edit in rule_rows:
                 contains = contains_edit.text().strip()

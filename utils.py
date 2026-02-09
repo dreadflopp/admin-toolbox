@@ -214,13 +214,13 @@ def save_break_settings(
 # =============================================================================
 
 def get_route_sort_order() -> str:
-    """Get route sort order: 'name' or 'time'."""
-    return (_load_config().get("route_sort_order") or "name").strip().lower() or "name"
+    """Get route sort order: 'name' or 'time'. Default: 'time'."""
+    return (_load_config().get("route_sort_order") or "time").strip().lower() or "time"
 
 
 def save_route_sort_order(order: str) -> None:
     """Save route sort order to config."""
-    save_config_updates({"route_sort_order": (order or "name").strip().lower() or "name"})
+    save_config_updates({"route_sort_order": (order or "time").strip().lower() or "time"})
 
 
 def _get_trip_visits(trip) -> list:
@@ -230,31 +230,39 @@ def _get_trip_visits(trip) -> list:
     return trip if isinstance(trip, list) else []
 
 
+def _get_first_trip_name(trip_item) -> str:
+    """Get trip name from (name, visits) tuple. Returns empty string if invalid."""
+    if isinstance(trip_item, tuple) and len(trip_item) >= 1:
+        return (trip_item[0] or "").strip().lower()
+    return ""
+
+
+# Order for time sort: morning first, afternoon second, evening last
+_TRIP_ORDER = {"morning": 0, "afternoon": 1, "evening": 2}
+
+
 def sort_routes_for_display(routes_trips: dict) -> list:
     """
     Return list of (slinga, trips) sorted by configured order.
     routes_trips: {slinga: [(name, visits), ...]}
+    - name: sort by route name only
+    - time: sort by first trip type (morning, afternoon, evening), then by name within each group
     """
     order = get_route_sort_order()
 
-    def _first_start(slinga: str):
+    def _first_trip_order(slinga: str) -> int:
+        """Order index for first trip: morning=0, afternoon=1, evening=2."""
         trips = routes_trips.get(slinga, [])
-        visits = _get_trip_visits(trips[0]) if trips else []
-        if not visits:
-            return ""
-        st = visits[0].get("starttid")
-        if st is None or pd.isna(st):
-            return ""
-        try:
-            return str(pd.to_datetime(st))
-        except Exception:
-            return str(st)
+        if not trips:
+            return 99
+        name = _get_first_trip_name(trips[0])
+        return _TRIP_ORDER.get(name, 99)
 
     items = list(routes_trips.items())
     if order == "time":
-        items.sort(key=lambda x: (_first_start(x[0]), x[0]))
+        items.sort(key=lambda x: (_first_trip_order(x[0]), x[0]))
     else:
-        items.sort(key=lambda x: (x[0], _first_start(x[0])))
+        items.sort(key=lambda x: x[0])
     return items
 
 
