@@ -3,6 +3,10 @@
   "disable_webengine_map": false,
   "prefer_leaflet_map": false,
   "default_route_address": "Angereds Torg 5, 42465 Angered",
+  "break_names": "RAST",
+  "break_morning_afternoon": "10:00-14:00",
+  "break_afternoon_evening": "15:00-19:00",
+  "route_sort_order": "name",
   "routines_folder": "",
   "route_rules": [
     {

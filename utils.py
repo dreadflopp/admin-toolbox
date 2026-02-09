@@ -9,6 +9,7 @@ import re
 import sqlite3
 import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+from datetime import time
 from pathlib import Path
 from typing import Optional, Tuple
 
@@ -118,6 +119,143 @@ def save_routine_zoom(filename: str, view_zoom: int, edit_pt: int) -> None:
     zoom = get_routines_zoom()
     zoom[filename] = {"view": view_zoom, "edit": edit_pt}
     save_config_updates({"routines_zoom": zoom})
+
+
+# =============================================================================
+# Break / schedule settings for route trip splitting (morning, afternoon, evening)
+# =============================================================================
+
+DEFAULT_BREAK_NAMES = "RAST"
+DEFAULT_BREAK_LUNCH = "10:00-14:00"
+DEFAULT_BREAK_EVENING = "15:00-19:00"
+
+TRIP_NAMES = ["morning", "afternoon", "evening"]
+
+
+def get_break_names() -> list:
+    """Get break names (semicolon-separated, case insensitive). Default: RAST."""
+    raw = (_load_config().get("break_names") or DEFAULT_BREAK_NAMES).strip()
+    if not raw:
+        return [DEFAULT_BREAK_NAMES.strip()]
+    return [s.strip() for s in raw.split(";") if s.strip()]
+
+
+def get_break_lunch_window() -> Tuple[time, time]:
+    """Get (start, end) time for lunch break. Default: 10:00-14:00."""
+    return _parse_time_window(
+        _load_config().get("break_morning_afternoon") or _load_config().get("break_lunch") or DEFAULT_BREAK_LUNCH,
+        (time(10, 0), time(14, 0)),
+    )
+
+
+def get_break_evening_window() -> Tuple[time, time]:
+    """Get (start, end) time for evening break. Default: 15:00-19:00."""
+    return _parse_time_window(
+        _load_config().get("break_afternoon_evening") or _load_config().get("break_evening") or DEFAULT_BREAK_EVENING,
+        (time(15, 0), time(19, 0)),
+    )
+
+
+# Backward compatibility aliases
+def get_break_morning_afternoon_window() -> Tuple[time, time]:
+    return get_break_lunch_window()
+
+
+def get_break_afternoon_evening_window() -> Tuple[time, time]:
+    return get_break_evening_window()
+
+
+def _parse_time_window(s: str, default: Tuple[time, time]) -> Tuple[time, time]:
+    """Parse 'HH:MM-HH:MM' or 'HH:MM - HH:MM' into (start, end) time tuple."""
+    s = (s or "").strip()
+    if not s:
+        return default
+    parts = re.split(r"\s*-\s*", s, maxsplit=1)
+    if len(parts) != 2:
+        return default
+    try:
+        start = _parse_time(parts[0].strip())
+        end = _parse_time(parts[1].strip())
+        if start is not None and end is not None:
+            return (start, end)
+    except Exception:
+        pass
+    return default
+
+
+def _parse_time(s: str) -> Optional[time]:
+    """Parse HH:MM or H:MM into time. Returns None if invalid."""
+    s = (s or "").strip()
+    if not s:
+        return None
+    m = re.match(r"^(\d{1,2}):(\d{2})$", s)
+    if m:
+        h, mi = int(m.group(1)), int(m.group(2))
+        if 0 <= h <= 23 and 0 <= mi <= 59:
+            return time(h, mi)
+    return None
+
+
+def save_break_settings(
+    break_names: str,
+    lunch_window: str,
+    evening_window: str,
+) -> None:
+    """Save break-related settings to config."""
+    save_config_updates({
+        "break_names": (break_names or DEFAULT_BREAK_NAMES).strip(),
+        "break_morning_afternoon": (lunch_window or DEFAULT_BREAK_LUNCH).strip(),
+        "break_afternoon_evening": (evening_window or DEFAULT_BREAK_EVENING).strip(),
+    })
+
+
+# =============================================================================
+# Route sort order: "name" (by name then time) or "time" (by time then name)
+# =============================================================================
+
+def get_route_sort_order() -> str:
+    """Get route sort order: 'name' or 'time'."""
+    return (_load_config().get("route_sort_order") or "name").strip().lower() or "name"
+
+
+def save_route_sort_order(order: str) -> None:
+    """Save route sort order to config."""
+    save_config_updates({"route_sort_order": (order or "name").strip().lower() or "name"})
+
+
+def _get_trip_visits(trip) -> list:
+    """Get visits list from trip (name, visits) tuple."""
+    if isinstance(trip, tuple) and len(trip) == 2:
+        return trip[1]
+    return trip if isinstance(trip, list) else []
+
+
+def sort_routes_for_display(routes_trips: dict) -> list:
+    """
+    Return list of (slinga, trips) sorted by configured order.
+    routes_trips: {slinga: [(name, visits), ...]}
+    """
+    order = get_route_sort_order()
+
+    def _first_start(slinga: str):
+        trips = routes_trips.get(slinga, [])
+        visits = _get_trip_visits(trips[0]) if trips else []
+        if not visits:
+            return ""
+        st = visits[0].get("starttid")
+        if st is None or pd.isna(st):
+            return ""
+        try:
+            return str(pd.to_datetime(st))
+        except Exception:
+            return str(st)
+
+    items = list(routes_trips.items())
+    if order == "time":
+        items.sort(key=lambda x: (_first_start(x[0]), x[0]))
+    else:
+        items.sort(key=lambda x: (x[0], _first_start(x[0])))
+    return items
 
 
 def get_default_customer() -> dict:
@@ -559,30 +697,132 @@ def build_routes_by_date(df: pd.DataFrame, default_address: str) -> dict:
     return result
 
 
-def split_route_into_trips(visits: list, default_address: str) -> list:
-    """
-    Split a route's visits into trips. A visit to the default address (that is not
-    the first or last visit) divides the route. The default visit belongs to the
-    trip (as the last visit of the current trip).
-    Returns: list of trips, each trip is a list of visit dicts.
-    """
+def _visit_time_start(v: dict) -> Optional[time]:
+    """Extract start time from a visit dict. Returns None if invalid."""
+    starttid = v.get("starttid")
+    if starttid is None or pd.isna(starttid):
+        return None
+    try:
+        if hasattr(starttid, "time"):
+            return starttid.time()
+        d = pd.to_datetime(starttid)
+        return d.to_pydatetime().time() if hasattr(d, "to_pydatetime") else d.time()
+    except Exception:
+        return None
+
+
+def _is_break_visit(v: dict, break_names: list, default_address: str) -> bool:
+    """True if visit is at default address and besokstyp/namn matches a break name (case insensitive)."""
+    addr = (v.get("adress") or "").strip().lower()
+    if addr != default_address.strip().lower():
+        return False
+    text = f"{v.get('besokstyp', '')} {v.get('namn', '')}".strip().upper()
+    for name in break_names:
+        if name and name.strip().upper() in text:
+            return True
+    return False
+
+
+def _ensure_trip_starts_ends_default(visits: list, default_address: str) -> list:
+    """Ensure trip starts and ends at default location. Prepends/appends default visit if needed."""
     if not visits:
         return []
     default_norm = default_address.strip().lower()
-    trips = []
+    result = list(visits)
+    first_addr = (result[0].get("adress") or "").strip().lower()
+    last_addr = (result[-1].get("adress") or "").strip().lower()
+    default_name = get_default_location_name()
+    default_visit = {
+        "starttid": result[0]["starttid"] if result else None,
+        "sluttid": None,
+        "namn": default_name,
+        "adress": default_address.strip(),
+        "besokstyp": "",
+        "slinga": result[0].get("slinga", "") if result else "",
+    }
+    if first_addr != default_norm:
+        prepend = dict(default_visit)
+        prepend["starttid"] = result[0]["starttid"]
+        result.insert(0, prepend)
+    if last_addr != default_norm:
+        append = dict(default_visit)
+        # Use last visit's end time for "return to office", fallback to start time
+        last = result[-1]
+        append["starttid"] = last.get("sluttid") or last["starttid"]
+        append["sluttid"] = last.get("sluttid")
+        result.append(append)
+    return result
+
+
+def _trip_name_for_no_breaks(visits: list, lunch_start: time, evening_start: time) -> str:
+    """
+    For routes with no breaks: name by first visit start time.
+    Before lunch start -> morning; before evening start -> afternoon; else -> evening.
+    """
+    if not visits:
+        return "morning"
+    t = _visit_time_start(visits[0])
+    if t is None:
+        return "morning"
+    if t < lunch_start:
+        return "morning"
+    if t < evening_start:
+        return "afternoon"
+    return "evening"
+
+
+def split_route_into_trips(visits: list, default_address: str) -> list:
+    """
+    Split a route's visits into trips named morning, afternoon, evening.
+    Break visits (at default address, besokstyp matching break names) divide the route.
+    - Lunch break (in lunch window): ends morning trip, starts afternoon.
+    - Evening break (in evening window): ends afternoon trip, starts evening.
+    For routes with no breaks: name by first visit time.
+    Each trip is ensured to start and end at the default location.
+    Returns: list of (trip_name, visits) tuples.
+    """
+    if not visits:
+        return []
+    break_names = get_break_names()
+    lunch_start, lunch_end = get_break_lunch_window()
+    evening_start, evening_end = get_break_evening_window()
+
+    # Build trips: split at breaks whose time falls in the configured windows
+    raw_trips = []
     current = []
+    last_break_was_evening = False
     for i, v in enumerate(visits):
-        addr = (v.get("adress") or "").strip().lower()
-        is_default = addr == default_norm
-        is_first = i == 0
-        is_last = i == len(visits) - 1
         current.append(v)
-        if is_default and not is_first and not is_last:
-            trips.append(current)
+        if not _is_break_visit(v, break_names, default_address):
+            continue
+        t = _visit_time_start(v)
+        if t is None:
+            continue
+        # Break divides: ends current trip, starts next
+        if lunch_start <= t <= lunch_end:
+            ensured = _ensure_trip_starts_ends_default(current, default_address)
+            if ensured:
+                raw_trips.append(("morning", ensured))
             current = []
+            last_break_was_evening = False
+        elif evening_start <= t <= evening_end:
+            ensured = _ensure_trip_starts_ends_default(current, default_address)
+            if ensured:
+                raw_trips.append(("afternoon", ensured))
+            current = []
+            last_break_was_evening = True
     if current:
-        trips.append(current)
-    return trips
+        ensured = _ensure_trip_starts_ends_default(current, default_address)
+        if ensured:
+            if raw_trips:
+                last_name = "evening" if last_break_was_evening else "afternoon"
+                raw_trips.append((last_name, ensured))
+            else:
+                # No breaks: name by first visit time
+                name = _trip_name_for_no_breaks(ensured, lunch_start, evening_start)
+                raw_trips.append((name, ensured))
+
+    return raw_trips
 
 
 # =============================================================================
