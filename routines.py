@@ -336,7 +336,8 @@ class RoutinesWindow(QMainWindow):
             if name == (self._current_file.name if self._current_file else None):
                 chip.main_btn.setChecked(True)
             chip.main_btn.clicked.connect(lambda checked, p=f: self._open_file(p))
-            self._routines_layout.addWidget(chip, 1)  # stretch=1: equal width, shrink together
+            # Natural width chips; layout stretch added at end keeps them left-aligned
+            self._routines_layout.addWidget(chip)
             self._chip_widgets[name] = chip
 
         # Plus button for new routine, after last routine
@@ -366,6 +367,8 @@ class RoutinesWindow(QMainWindow):
         )
         btn_plus.clicked.connect(self._new_file)
         self._routines_layout.addWidget(btn_plus, 0)  # no stretch: fixed size
+        # Stretch after last widget so chips stay left-aligned when there is extra space
+        self._routines_layout.addStretch(1)
 
         # Open default on first load if no routine selected
         if not self._current_file and default and (self._folder / default).exists():
@@ -424,7 +427,9 @@ class RoutinesWindow(QMainWindow):
 
     def _open_file(self, path: Path) -> None:
         """Open markdown file in read-only view."""
-        if self._dirty:
+        # Only prompt about unsaved changes when there is an actual current file.
+        # After deleting a routine, _current_file is None, so we should not ask.
+        if self._dirty and self._current_file:
             reply = QMessageBox.question(
                 self, "Unsaved changes",
                 "Save changes before switching?",
@@ -780,10 +785,13 @@ class RoutinesWindow(QMainWindow):
             if get_routines_default_file() == self._current_file.name:
                 save_routines_default_file("")
             self._current_file = None
+            self._dirty = False
             self._last_save_time = None
             self._view_widget.clear()
             self._edit_widget.clear()
+            self._auto_save_timer.stop()
             self._refresh_ui()
+            self._update_save_button_state()
             self._update_last_save_text()
             self._log("Routine deleted.", "success")
         except Exception as e:
