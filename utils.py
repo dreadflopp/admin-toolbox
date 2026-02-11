@@ -121,6 +121,20 @@ def save_routine_zoom(filename: str, view_zoom: int, edit_pt: int) -> None:
     save_config_updates({"routines_zoom": zoom})
 
 
+def get_routines_order() -> list[str]:
+    """Get routine tab order from config: [filename1, filename2, ...]."""
+    cfg = _load_config()
+    order = cfg.get("routines_order")
+    if isinstance(order, list):
+        return [f for f in order if isinstance(f, str) and f.strip()]
+    return []
+
+
+def save_routines_order(filenames: list[str]) -> None:
+    """Save routine tab order to config."""
+    save_config_updates({"routines_order": [f.strip() for f in filenames if f and f.strip()]})
+
+
 # =============================================================================
 # Break / schedule settings for route trip splitting (morning, afternoon, evening)
 # =============================================================================
