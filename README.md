@@ -32,11 +32,21 @@ python main.py
 
 ## Build exe (Windows)
 
+For **map display** in the exe, install QtWebEngine in the build environment:
+
+```bash
+pip install pyside6-addons
+```
+
+Then build:
+
 ```bash
 pip install pyinstaller
-pyinstaller --noconfirm --collect-all PySide6 Toolbox.spec
+python -m PyInstaller --noconfirm Toolbox.spec
 # Output: dist/Toolbox/
 ```
+
+Without `pyside6-addons`, the exe runs but shows "Map module not available" when opening map views.
 
 ## GitHub Actions releases
 

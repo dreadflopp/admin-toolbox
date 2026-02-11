@@ -18,11 +18,12 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 
-from config import AppConfig, Styles
+from config import AppConfig, Styles, ensure_config_exists
 from dashboard import Dashboard
 
 
 def main() -> int:
+    ensure_config_exists()
     # High DPI support
     QApplication.setHighDpiScaleFactorRoundingPolicy(
         Qt.HighDpiScaleFactorRoundingPolicy.PassThrough

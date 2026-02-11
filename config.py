@@ -3,6 +3,7 @@ Application configuration and styles for the Toolbox desktop app.
 Provides AppConfig for paths/settings and Styles for Windows 11 Fluent Design.
 """
 
+import json
 import sys
 from pathlib import Path
 
@@ -70,10 +71,28 @@ class AppConfig:
     DEFAULT_ROUTE_ADDRESS = "Angereds Torg 5, 42465 Angered"
 
     # Paths
-    PROJECT_DIR = Path(__file__).parent
+    PROJECT_DIR = _bundle_dir() if _frozen() else Path(__file__).parent
     CONFIG_JSON = _exe_dir() / "config.json"
     MAP_TEMPLATE_GOOGLE = _bundle_dir() / "map_template_google.html"
     GEOCACHE_DB = _exe_dir() / "geocache.db"  # always next to exe (portable)
+
+    # Default config written when config.json is missing (e.g. first run of exe)
+    DEFAULT_CONFIG = {"google_maps_api_key": ""}
+
+
+def ensure_config_exists() -> None:
+    """Create config.json with default content if it does not exist (e.g. first run of built exe)."""
+    path = AppConfig.CONFIG_JSON
+    if path.exists():
+        return
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps(AppConfig.DEFAULT_CONFIG, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    except OSError:
+        pass
 
 
 # =============================================================================
