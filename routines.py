@@ -24,8 +24,8 @@ from PySide6.QtWidgets import (
     QColorDialog,
     QMenu,
 )
-from PySide6.QtCore import Qt, QTimer, QEvent, QObject, QSize
-from PySide6.QtGui import QFont, QColor, QIcon, QImage, QPixmap, QPainter, QFontMetrics
+from PySide6.QtCore import Qt, QTimer, QEvent, QObject, QSize, QMimeData
+from PySide6.QtGui import QFont, QColor, QIcon, QImage, QPixmap, QPainter, QFontMetrics, QDrag, QDragEnterEvent, QDragMoveEvent, QDropEvent
 
 from config import Styles, AppConfig
 from utils import (
@@ -36,6 +36,8 @@ from utils import (
     save_routine_color,
     get_routines_zoom,
     save_routine_zoom,
+    get_routines_order,
+    save_routines_order,
 )
 
 
@@ -78,6 +80,214 @@ class _ZoomablePlainTextEdit(QPlainTextEdit):
         self.viewport().installEventFilter(_ViewportZoomFilter(zoom_target=self, parent=self))
 
 
+class _DropIndicator(QWidget):
+    """Vertical line indicator showing where a dragged tab will be dropped."""
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setFixedWidth(3)
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)  # Don't intercept mouse events
+        self.hide()
+    
+    def paintEvent(self, event):
+        """Draw the indicator line with a subtle shadow effect."""
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, False)
+        # Draw a blue vertical line
+        painter.fillRect(self.rect(), QColor("#0078d4"))
+        # Add a subtle highlight on the left edge
+        painter.setPen(QColor("#40a8ff"))
+        painter.drawLine(0, 0, 0, self.height())
+
+
+class _RoutinesTabContainer(QWidget):
+    """Container widget for routine tabs that handles drag and drop reordering."""
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._routines_window = parent  # Reference to RoutinesWindow
+        self.setAcceptDrops(True)
+        # Create drop indicator (initially hidden)
+        self._drop_indicator = _DropIndicator(self)
+        self._drop_indicator.hide()
+    
+    def dragEnterEvent(self, event: QDragEnterEvent) -> None:
+        """Accept drag if it's a routine chip being dragged."""
+        if event.mimeData().hasText():
+            filename = event.mimeData().text()
+            if self._routines_window and filename in self._routines_window._chip_widgets:
+                event.acceptProposedAction()
+            else:
+                event.ignore()
+        else:
+            event.ignore()
+    
+    def dragMoveEvent(self, event: QDragMoveEvent) -> None:
+        """Allow drag move over the routines widget and show drop indicator."""
+        if event.mimeData().hasText():
+            filename = event.mimeData().text()
+            if self._routines_window and filename in self._routines_window._chip_widgets:
+                event.acceptProposedAction()
+                # Calculate and show drop indicator position
+                self._update_drop_indicator(event.pos())
+            else:
+                event.ignore()
+                self._drop_indicator.hide()
+        else:
+            event.ignore()
+            self._drop_indicator.hide()
+    
+    def dragLeaveEvent(self, event) -> None:
+        """Hide drop indicator when drag leaves the widget."""
+        self._drop_indicator.hide()
+        super().dragLeaveEvent(event)
+    
+    def _update_drop_indicator(self, drop_pos):
+        """Update the position of the drop indicator based on drop position."""
+        if not self._routines_window:
+            self._drop_indicator.hide()
+            return
+        
+        target_chip = None
+        insert_before = False
+        indicator_x = None
+        
+        # Check each chip to see if drop is over it
+        for filename, chip in self._routines_window._chip_widgets.items():
+            chip_pos = chip.mapTo(self, chip.rect().topLeft())
+            chip_rect = chip.geometry()
+            chip_rect.moveTopLeft(chip_pos)
+            
+            if chip_rect.contains(drop_pos):
+                target_chip = chip
+                # Determine if drop is on left or right half of chip
+                chip_center_x = chip_rect.x() + chip_rect.width() / 2
+                if drop_pos.x() < chip_center_x:
+                    insert_before = True
+                    indicator_x = chip_rect.x()
+                else:
+                    insert_before = False
+                    indicator_x = chip_rect.x() + chip_rect.width()
+                break
+        
+        # If no target chip found, check if drop is at the end
+        if target_chip is None:
+            if self._routines_window._chip_widgets:
+                chips = list(self._routines_window._chip_widgets.values())
+                if chips:
+                    last_chip = chips[-1]
+                    last_pos = last_chip.mapTo(self, last_chip.rect().topRight())
+                    if drop_pos.x() > last_pos.x():
+                        indicator_x = last_pos.x() + last_chip.width()
+        
+        # Show/hide indicator based on valid position
+        if indicator_x is not None:
+            self._drop_indicator.setGeometry(indicator_x - 1, 0, 2, self.height())
+            self._drop_indicator.show()
+            self._drop_indicator.raise_()  # Bring to front
+        else:
+            self._drop_indicator.hide()
+    
+    def dropEvent(self, event: QDropEvent) -> None:
+        """Handle drop to reorder tabs."""
+        if not self._routines_window:
+            event.ignore()
+            return
+            
+        if not event.mimeData().hasText():
+            event.ignore()
+            return
+        
+        dragged_filename = event.mimeData().text()
+        if dragged_filename not in self._routines_window._chip_widgets:
+            event.ignore()
+            return
+        
+        # Find drop position by checking which chip the mouse is over
+        drop_pos = event.pos()  # Use pos() for QDropEvent
+        target_chip = None
+        insert_before = False
+        
+        # Check each chip to see if drop is over it
+        for filename, chip in self._routines_window._chip_widgets.items():
+            chip_pos = chip.mapTo(self, chip.rect().topLeft())
+            chip_rect = chip.geometry()
+            chip_rect.moveTopLeft(chip_pos)
+            
+            if chip_rect.contains(drop_pos):
+                target_chip = chip
+                # Determine if drop is on left or right half of chip
+                chip_center_x = chip_rect.x() + chip_rect.width() / 2
+                if drop_pos.x() < chip_center_x:
+                    insert_before = True
+                else:
+                    insert_before = False
+                break
+        
+        # If no target chip found, check if drop is at the end
+        if target_chip is None:
+            # Check if drop is after the last chip
+            if self._routines_window._chip_widgets:
+                chips = list(self._routines_window._chip_widgets.values())
+                if chips:
+                    last_chip = chips[-1]
+                    last_pos = last_chip.mapTo(self, last_chip.rect().topRight())
+                    if drop_pos.x() > last_pos.x():
+                        target_chip = last_chip
+                        insert_before = False
+        
+        if target_chip is None:
+            event.ignore()
+            return
+        
+        # Reorder: remove dragged chip, insert at new position
+        dragged_chip = self._routines_window._chip_widgets[dragged_filename]
+        target_filename = target_chip.path.name
+        
+        # Get current order from layout
+        current_order = []
+        layout = self.layout()
+        if layout:
+            for i in range(layout.count()):
+                item = layout.itemAt(i)
+                if item and item.widget():
+                    widget = item.widget()
+                    if isinstance(widget, RoutineChip):
+                        current_order.append(widget.path.name)
+        
+        # Remove dragged item from order
+        if dragged_filename in current_order:
+            current_order.remove(dragged_filename)
+        
+        # Find target position and insert
+        if target_filename in current_order:
+            target_idx = current_order.index(target_filename)
+            if insert_before:
+                current_order.insert(target_idx, dragged_filename)
+            else:
+                current_order.insert(target_idx + 1, dragged_filename)
+        else:
+            # Target not found, append
+            current_order.append(dragged_filename)
+        
+        # Save new order
+        save_routines_order(current_order)
+        
+        # Refresh UI to apply new order
+        current_file = self._routines_window._current_file
+        self._routines_window._refresh_ui()
+        if current_file:
+            self._routines_window._current_file = current_file
+            self._routines_window._update_button_checked()
+        
+        # Hide drop indicator after drop
+        self._drop_indicator.hide()
+        
+        event.acceptProposedAction()
+        if self._routines_window._log_fn:
+            self._routines_window._log_fn("Tab order updated", "success")
+
+
 def _luminance(hex_color: str) -> float:
     """Return luminance 0-1. Use black text if > 0.5, white if <= 0.5."""
     c = hex_color.lstrip("#")
@@ -85,6 +295,55 @@ def _luminance(hex_color: str) -> float:
         return 0.5
     r, g, b = int(c[0:2], 16) / 255, int(c[2:4], 16) / 255, int(c[4:6], 16) / 255
     return 0.299 * r + 0.587 * g + 0.114 * b
+
+
+class _ChipDragFilter(QObject):
+    """Event filter to handle drag on the button inside RoutineChip."""
+    
+    def __init__(self, chip, parent=None):
+        super().__init__(parent)
+        self._chip = chip
+        self._drag_start_pos = None
+        self._dragging = False
+    
+    def eventFilter(self, obj, event) -> bool:
+        """Filter mouse events to enable dragging."""
+        if event.type() == QEvent.Type.MouseButtonPress:
+            if event.button() == Qt.MouseButton.LeftButton:
+                # Use pos() for QMouseEvent
+                self._drag_start_pos = event.pos()
+                self._dragging = False
+                return False  # Let button handle click normally
+        elif event.type() == QEvent.Type.MouseMove:
+            if self._drag_start_pos is not None and (event.buttons() & Qt.MouseButton.LeftButton) and not self._dragging:
+                # Check if mouse moved enough to start drag
+                move_distance = (event.pos() - self._drag_start_pos).manhattanLength()
+                if move_distance >= 10:
+                    # Start drag - consume this and future move events
+                    self._dragging = True
+                    drag = QDrag(self._chip)
+                    mime_data = QMimeData()
+                    mime_data.setText(self._chip._path.name)
+                    drag.setMimeData(mime_data)
+                    
+                    # Visual feedback
+                    pixmap = self._chip.grab()
+                    drag.setPixmap(pixmap)
+                    drag.setHotSpot(event.pos() - self._drag_start_pos)
+                    
+                    # Execute drag (this blocks until drop)
+                    drag.exec(Qt.DropAction.MoveAction)
+                    self._drag_start_pos = None
+                    self._dragging = False
+                    return True  # Consume the event
+            elif self._dragging:
+                return True  # Consume move events during drag
+        elif event.type() == QEvent.Type.MouseButtonRelease:
+            if self._dragging:
+                self._dragging = False
+            self._drag_start_pos = None
+        
+        return False  # Don't filter other events
 
 
 class RoutineChip(QFrame):
@@ -109,6 +368,11 @@ class RoutineChip(QFrame):
         self._main_btn.setToolTip(display_name)
         layout.addWidget(self._main_btn)
         self._apply_color(color)
+        # Install event filter on button to handle drag
+        self._drag_filter = _ChipDragFilter(self)
+        self._main_btn.installEventFilter(self._drag_filter)
+        # Enable drag and drop
+        self.setAcceptDrops(False)  # Chips don't accept drops, only the container does
 
     def _apply_color(self, color: str) -> None:
         self._color = color
@@ -139,6 +403,7 @@ class RoutineChip(QFrame):
         fm = QFontMetrics(self._main_btn.font())
         elided = fm.elidedText(self._full_name, Qt.TextElideMode.ElideRight, w)
         self._main_btn.setText(elided)
+
 
     @property
     def main_btn(self) -> QPushButton:
@@ -253,7 +518,7 @@ class RoutinesWindow(QMainWindow):
         layout.addWidget(toolbar_frame)
 
         # --- Routines tabs (no scroll: buttons shrink and elide text) ---
-        self._routines_widget = QWidget()
+        self._routines_widget = _RoutinesTabContainer(self)
         self._routines_widget.setMaximumHeight(48)
         self._routines_layout = QHBoxLayout(self._routines_widget)
         self._routines_layout.setContentsMargins(4, 4, 4, 0)
@@ -323,11 +588,29 @@ class RoutinesWindow(QMainWindow):
 
         # Rebuild routine chips (tab style) and + button
         self._clear_buttons()
-        files = sorted(self._folder.glob("*.md"), key=lambda p: p.name.lower())
+        all_files = list(self._folder.glob("*.md"))
+        
+        # Get stored order and apply it
+        stored_order = get_routines_order()
+        file_dict = {f.name: f for f in all_files}
+        
+        # Build ordered list: items in stored_order first (if they exist), then alphabetical for new files
+        ordered_files = []
+        seen = set()
+        for filename in stored_order:
+            if filename in file_dict:
+                ordered_files.append(file_dict[filename])
+                seen.add(filename)
+        
+        # Add any files not in stored order (new files) in alphabetical order
+        new_files = [f for f in all_files if f.name not in seen]
+        new_files.sort(key=lambda p: p.name.lower())
+        ordered_files.extend(new_files)
+        
         default = get_routines_default_file()
         colors = get_routines_colors()
 
-        for f in files:
+        for f in ordered_files:
             name = f.name
             display_name = f.stem
             color = colors.get(name, "#9e9e9e")
@@ -724,6 +1007,11 @@ class RoutinesWindow(QMainWindow):
             return
         try:
             path.write_text("", encoding="utf-8")
+            # Add new file to end of order
+            order = get_routines_order()
+            if name not in order:
+                order.append(name)
+                save_routines_order(order)
             self._refresh_ui()
             self._open_file(path)
             self._last_save_time = None  # new file, not saved yet
@@ -762,6 +1050,12 @@ class RoutinesWindow(QMainWindow):
             if old_name in colors:
                 save_routine_color(new_name, colors[old_name])
                 save_routine_color(old_name, "")  # remove old
+            # Update order: replace old name with new name
+            order = get_routines_order()
+            if old_name in order:
+                idx = order.index(old_name)
+                order[idx] = new_name
+                save_routines_order(order)
             self._current_file = new_path
             self._refresh_ui()
             self._log(f"Renamed to {new_name.removesuffix('.md')}", "success")
@@ -781,9 +1075,15 @@ class RoutinesWindow(QMainWindow):
         ) != QMessageBox.StandardButton.Yes:
             return
         try:
+            deleted_name = self._current_file.name
             self._current_file.unlink()
-            if get_routines_default_file() == self._current_file.name:
+            if get_routines_default_file() == deleted_name:
                 save_routines_default_file("")
+            # Remove from order
+            order = get_routines_order()
+            if deleted_name in order:
+                order.remove(deleted_name)
+                save_routines_order(order)
             self._current_file = None
             self._dirty = False
             self._last_save_time = None
