@@ -111,6 +111,55 @@ class _RoutinesTabContainer(QWidget):
         self._drop_indicator = _DropIndicator(self)
         self._drop_indicator.hide()
     
+    def resizeEvent(self, event) -> None:
+        """Recalculate tab widths when container resizes to maintain equal sizing."""
+        super().resizeEvent(event)
+        self._update_tab_widths()
+    
+    def _update_tab_widths(self) -> None:
+        """Calculate and set equal widths for all tabs based on available space."""
+        if not self._routines_window or not self._routines_window._chip_widgets:
+            return
+        
+        layout = self.layout()
+        if not layout:
+            return
+        
+        # Get available width (container width minus margins and spacing)
+        margins = layout.contentsMargins()
+        available_width = self.width() - margins.left() - margins.right()
+        
+        # Count tabs and find plus button width
+        tab_count = len(self._routines_window._chip_widgets)
+        plus_button_width = 28  # Fixed size from _refresh_ui
+        spacing = layout.spacing()
+        
+        if tab_count == 0:
+            return
+        
+        # Account for spacing between tabs and plus button
+        # Spacing: between each tab (tab_count - 1) + one before plus button
+        total_spacing = spacing * tab_count  # spacing between tabs + before plus button
+        available_width -= total_spacing + plus_button_width
+        
+        # Calculate preferred width per tab
+        preferred_width = RoutineChip.MAX_WIDTH
+        
+        # Calculate equal width for all tabs
+        if tab_count * preferred_width <= available_width:
+            # All tabs fit at preferred width
+            tab_width = preferred_width
+        else:
+            # Need to shrink tabs equally
+            tab_width = max(RoutineChip.MIN_WIDTH, available_width // tab_count)
+        
+        # Set width for all tabs
+        for chip in self._routines_window._chip_widgets.values():
+            chip.setFixedWidth(tab_width)
+        
+        # Force layout update
+        layout.update()
+    
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
         """Accept drag if it's a routine chip being dragged."""
         if event.mimeData().hasText():
@@ -360,6 +409,8 @@ class RoutineChip(QFrame):
         self.setFrameStyle(QFrame.Shape.NoFrame)
         self.setMinimumWidth(self.MIN_WIDTH)
         self.setMaximumWidth(self.MAX_WIDTH)
+        # Width will be set dynamically by container, but allow flexibility initially
+        self._fixed_width = None
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         self._main_btn = QPushButton(display_name)
@@ -390,6 +441,12 @@ class RoutineChip(QFrame):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
+        QTimer.singleShot(0, self._update_elided_text)
+    
+    def setFixedWidth(self, width: int) -> None:
+        """Set fixed width for browser-like tab sizing."""
+        self._fixed_width = width
+        super().setFixedWidth(width)
         QTimer.singleShot(0, self._update_elided_text)
 
     def showEvent(self, event) -> None:
@@ -657,6 +714,9 @@ class RoutinesWindow(QMainWindow):
         if not self._current_file and default and (self._folder / default).exists():
             self._open_file(self._folder / default)
         self._update_default_button_style()
+        
+        # Update tab widths after refresh to ensure proper sizing
+        QTimer.singleShot(0, self._routines_widget._update_tab_widths)
 
     def _clear_buttons(self) -> None:
         """Remove all routine chips and the + button."""
