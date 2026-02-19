@@ -7,6 +7,16 @@ import json
 import sys
 from pathlib import Path
 
+# Cache Path.home() to avoid repeated slow calls on network drives
+_cached_home_dir = None
+
+def _get_home_dir() -> Path:
+    """Get home directory, cached to avoid repeated slow calls."""
+    global _cached_home_dir
+    if _cached_home_dir is None:
+        _cached_home_dir = Path.home()
+    return _cached_home_dir
+
 
 def _frozen() -> bool:
     """True when running as PyInstaller exe."""
@@ -38,6 +48,12 @@ def _exe_dir() -> Path:
 # =============================================================================
 
 
+class _DefaultExportDir:
+    """Descriptor for lazy computation of DEFAULT_EXPORT_DIR."""
+    def __get__(self, obj, objtype=None):
+        return str(_get_home_dir() / "Documents" / "Toolbox_Exports")
+
+
 class AppConfig:
     """Central application configuration."""
 
@@ -46,7 +62,8 @@ class AppConfig:
     ORGANIZATION = "Toolbox"
 
     # Default paths (user's home or current working directory)
-    DEFAULT_EXPORT_DIR = str(Path.home() / "Documents" / "Toolbox_Exports")
+    # Uses cached home directory to avoid slow Path.home() calls on network drives
+    DEFAULT_EXPORT_DIR = _DefaultExportDir()
 
     # Address Source: PDF with multi-page table, header on each page
     # Columns to extract: Färg, Förnamn, Efternamn, Adress
@@ -110,144 +127,113 @@ class Styles:
 
     @classmethod
     def _base_font_pt(cls, app) -> int:
-        """Base font size in pt, scaled for DPI (150% laptop vs 4K)."""
+        """Base font size in pt, scaled for DPI (150% laptop vs 4K).
+        Cached per app instance to avoid repeated screen queries.
+        """
+        # Cache the result per app instance (app object is unique per run)
+        if not hasattr(cls, '_font_cache'):
+            cls._font_cache = {}
+        cache_key = id(app)
+        if cache_key in cls._font_cache:
+            return cls._font_cache[cache_key]
+        
         try:
             screen = app.primaryScreen()
             if screen:
                 log_dpi = screen.logicalDotsPerInch()
                 scale = log_dpi / 96.0
-                return max(8, min(11, int(9 * scale)))
+                result = max(8, min(11, int(9 * scale)))
+            else:
+                result = 9
         except Exception:
-            pass
-        return 9
+            result = 9
+        
+        cls._font_cache[cache_key] = result
+        return result
+
+    @classmethod
+    def _get_color_palette(cls, dark_mode: bool) -> dict:
+        """Get color palette for dark or light mode."""
+        if dark_mode:
+            return {
+                "main_bg": "#202020",
+                "text": "#f3f3f3",
+                "lineedit_border": "#3b3a39",
+                "lineedit_bg": "#292827",
+                "lineedit_disabled_bg": "#323130",
+                "lineedit_disabled_text": "#605e5c",
+                "button_hover": "#1084d8",
+                "button_disabled_bg": "#3b3a39",
+                "button_disabled_text": "#605e5c",
+                "button_secondary_bg": "#5c5c5c",
+                "button_secondary_hover": "#6e6e6e",
+                "button_tertiary_text": "#8a8886",
+                "button_tertiary_hover_bg": "#3b3a39",
+                "button_zoom_bg": "#5c5c5c",
+                "button_zoom_text": "#f3f3f3",
+                "button_zoom_border": "#6e6e6e",
+                "button_zoom_hover": "#6e6e6e",
+                "button_zoom_pressed": "#4a4a4a",
+                "groupbox_border": "#3b3a39",
+                "groupbox_title_bg": "#202020",
+                "table_selection_bg": "#1e3a5f",
+                "table_selection_text": "#f3f3f3",
+                "table_hover_bg": "#2d3e50",
+            }
+        # Light mode
+        return {
+            "main_bg": "#fafafa",
+            "text": "#323130",
+            "lineedit_border": "#e1dfdd",
+            "lineedit_bg": "#ffffff",
+            "lineedit_disabled_bg": "#f3f2f1",
+            "lineedit_disabled_text": "#a19f9d",
+            "button_hover": "#106ebe",
+            "button_disabled_bg": "#e1dfdd",
+            "button_disabled_text": "#8a8886",
+            "button_secondary_bg": "#edebe9",
+            "button_secondary_text": "#323130",
+            "button_secondary_hover": "#d2d0ce",
+            "button_secondary_disabled_bg": "#f3f2f1",
+            "button_secondary_disabled_text": "#a19f9d",
+            "button_tertiary_text": "#605e5c",
+            "button_tertiary_hover_bg": "#edebe9",
+            "button_zoom_bg": "#e1e1e1",
+            "button_zoom_text": "#1a1a1a",
+            "button_zoom_border": "#ccc",
+            "button_zoom_hover": "#d0d0d0",
+            "button_zoom_pressed": "#c0c0c0",
+            "groupbox_border": "#edebe9",
+            "groupbox_bg": "#ffffff",
+            "groupbox_title_bg": "#fafafa",
+            "table_selection_bg": "#bbdefb",
+            "table_selection_text": "#323130",
+            "table_hover_bg": "#e3f2fd",
+        }
 
     @classmethod
     def _build_style(cls, font_pt: int, dark_mode: bool) -> str:
         """Build QSS with given base font size."""
-        if dark_mode:
-            return f"""
-                QWidget {{
-                    font-family: {cls.FONT_FAMILY};
-                    font-size: {font_pt}pt;
-                }}
-                QMainWindow {{
-                    background-color: #202020;
-                }}
-                QLabel {{
-                    color: #f3f3f3;
-                }}
-                QLineEdit {{
-                    padding: 0.6em 0.8em;
-                    border: 1px solid #3b3a39;
-                    border-radius: 6px;
-                    background-color: #292827;
-                    color: #f3f3f3;
-                    selection-background-color: #0078d4;
-                }}
-                QLineEdit:focus {{
-                    border-color: #0078d4;
-                    outline: none;
-                }}
-                QLineEdit:disabled {{
-                    background-color: #323130;
-                    color: #605e5c;
-                }}
-                QLineEdit#filePath {{
-                    font-size: 8pt;
-                    padding: 4px 8px;
-                }}
-                QPushButton {{
-                    padding: 0.5em 1em;
-                    border: none;
-                    border-radius: 6px;
-                    background-color: #0078d4;
-                    color: white;
-                    font-weight: 500;
-                }}
-                QPushButton:hover {{
-                    background-color: #1084d8;
-                }}
-                QPushButton:pressed {{
-                    background-color: #005a9e;
-                }}
-                QPushButton:disabled {{
-                    background-color: #3b3a39;
-                    color: #605e5c;
-                }}
-                QPushButton#secondary {{
-                    background-color: #5c5c5c;
-                }}
-                QPushButton#secondary:hover {{
-                    background-color: #6e6e6e;
-                }}
-                QPushButton#secondary:disabled {{
-                    background-color: #3b3a39;
-                }}
-                QPushButton#tertiary {{
-                    background-color: transparent;
-                    color: #8a8886;
-                }}
-                QPushButton#tertiary:hover {{
-                    background-color: #3b3a39;
-                    color: #f3f3f3;
-                }}
-                QPushButton#zoom {{
-                    background-color: #5c5c5c;
-                    color: #f3f3f3;
-                    border: 1px solid #6e6e6e;
-                    font-size: 14pt;
-                    font-weight: bold;
-                }}
-                QPushButton#zoom:hover {{
-                    background-color: #6e6e6e;
-                }}
-                QPushButton#zoom:pressed {{
-                    background-color: #4a4a4a;
-                }}
-                QGroupBox {{
-                    font-weight: 600;
-                    border: 1px solid #3b3a39;
-                    border-radius: 8px;
-                    margin-top: 10px;
-                    padding: 10px 10px 10px 10px;
-                    padding-top: 14px;
-                }}
-                QGroupBox::title {{
-                    subcontrol-origin: margin;
-                    subcontrol-position: top left;
-                    left: 12px;
-                    padding: 0 6px;
-                    background-color: #202020;
-                }}
-                QTableWidget::item {{
-                    selection-background-color: #1e3a5f;
-                    selection-color: #f3f3f3;
-                }}
-                QTableWidget::item:hover {{
-                    background-color: #2d3e50;
-                }}
-                QScrollArea {{
-                    border: none;
-                    background-color: transparent;
-                }}
-            """
-        # Light mode (default)
+        colors = cls._get_color_palette(dark_mode)
+        
+        # Common QSS template with color placeholders
         return f"""
             QWidget {{
                 font-family: {cls.FONT_FAMILY};
                 font-size: {font_pt}pt;
             }}
             QMainWindow {{
-                background-color: #fafafa;
+                background-color: {colors['main_bg']};
             }}
             QLabel {{
-                color: #323130;
+                color: {colors['text']};
             }}
             QLineEdit {{
                 padding: 0.6em 0.8em;
-                border: 1px solid #e1dfdd;
+                border: 1px solid {colors['lineedit_border']};
                 border-radius: 6px;
-                background-color: #ffffff;
+                background-color: {colors['lineedit_bg']};
+                color: {colors['text']};
                 selection-background-color: #0078d4;
             }}
             QLineEdit:focus {{
@@ -255,8 +241,8 @@ class Styles:
                 outline: none;
             }}
             QLineEdit:disabled {{
-                background-color: #f3f2f1;
-                color: #a19f9d;
+                background-color: {colors['lineedit_disabled_bg']};
+                color: {colors['lineedit_disabled_text']};
             }}
             QLineEdit#filePath {{
                 font-size: 8pt;
@@ -271,69 +257,69 @@ class Styles:
                 font-weight: 500;
             }}
             QPushButton:hover {{
-                background-color: #106ebe;
+                background-color: {colors['button_hover']};
             }}
             QPushButton:pressed {{
                 background-color: #005a9e;
             }}
             QPushButton:disabled {{
-                background-color: #e1dfdd;
-                color: #8a8886;
+                background-color: {colors['button_disabled_bg']};
+                color: {colors['button_disabled_text']};
             }}
             QPushButton#secondary {{
-                background-color: #edebe9;
-                color: #323130;
+                background-color: {colors['button_secondary_bg']};
+                {f"color: {colors['button_secondary_text']};" if 'button_secondary_text' in colors else ''}
             }}
             QPushButton#secondary:hover {{
-                background-color: #d2d0ce;
+                background-color: {colors['button_secondary_hover']};
             }}
             QPushButton#secondary:disabled {{
-                background-color: #f3f2f1;
-                color: #a19f9d;
+                background-color: {colors.get('button_secondary_disabled_bg', colors['button_disabled_bg'])};
+                color: {colors.get('button_secondary_disabled_text', colors['button_disabled_text'])};
             }}
             QPushButton#tertiary {{
                 background-color: transparent;
-                color: #605e5c;
+                color: {colors['button_tertiary_text']};
             }}
             QPushButton#tertiary:hover {{
-                background-color: #edebe9;
-                color: #323130;
+                background-color: {colors['button_tertiary_hover_bg']};
+                color: {colors['text']};
             }}
             QPushButton#zoom {{
-                background-color: #e1e1e1;
-                color: #1a1a1a;
-                border: 1px solid #ccc;
+                background-color: {colors['button_zoom_bg']};
+                color: {colors['button_zoom_text']};
+                border: 1px solid {colors['button_zoom_border']};
                 font-size: 14pt;
                 font-weight: bold;
             }}
             QPushButton#zoom:hover {{
-                background-color: #d0d0d0;
+                background-color: {colors['button_zoom_hover']};
             }}
             QPushButton#zoom:pressed {{
-                background-color: #c0c0c0;
+                background-color: {colors['button_zoom_pressed']};
             }}
             QGroupBox {{
                 font-weight: 600;
-                border: 1px solid #edebe9;
+                border: 1px solid {colors['groupbox_border']};
                 border-radius: 8px;
                 margin-top: 10px;
                 padding: 10px 10px 10px 10px;
                 padding-top: 14px;
-                background-color: #ffffff;
+                {f"background-color: {colors['groupbox_bg']};" if 'groupbox_bg' in colors else ''}
             }}
             QGroupBox::title {{
                 subcontrol-origin: margin;
                 subcontrol-position: top left;
                 left: 12px;
                 padding: 0 6px;
-                background-color: #fafafa;
+                background-color: {colors['groupbox_title_bg']};
             }}
             QTableWidget::item {{
-                selection-background-color: #bbdefb;
-                selection-color: #323130;
+                selection-background-color: {colors['table_selection_bg']};
+                selection-color: {colors['table_selection_text']};
             }}
             QTableWidget::item:hover {{
-                background-color: #e3f2fd;
+                background-color: {colors['table_hover_bg']};
             }}
             QScrollArea {{
                 border: none;

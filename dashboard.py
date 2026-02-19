@@ -16,13 +16,6 @@ from PySide6.QtWidgets import (
     QTextEdit,
     QPushButton,
     QFileDialog,
-    QDialog,
-    QDialogButtonBox,
-    QMessageBox,
-    QScrollArea,
-    QComboBox,
-    QCheckBox,
-    QFrame,
     QSizePolicy,
     QSplitter,
 )
@@ -31,31 +24,11 @@ from datetime import datetime
 from PySide6.QtCore import Qt, Signal, QObject, QThread
 
 from config import AppConfig, Styles
-from windows import CustomerListMapWindow, RoutesMapWindow, RuleEditorWindow
-from routines import RoutinesWindow
+# Window classes imported lazily when needed to avoid heavy dependencies at startup
+# PDF extraction and route loading imported lazily in workers to avoid pandas/pdfplumber at startup
+# Export functions imported lazily - only needed when saving files
 from utils import (
-    extract_pdf_data,
-    validate_address_columns,
-    load_route_data,
-    export_address_to_csv,
-    export_address_to_excel,
-    export_route_to_csv,
-    export_route_to_excel,
-    get_default_route_address,
-    get_default_location_name,
-    get_route_color_rules,
-    save_route_color_rules,
-    save_config_updates,
     get_routines_folder,
-    save_routines_folder,
-    clear_geocache,
-    get_break_names,
-    get_break_lunch_window,
-    get_break_evening_window,
-    save_break_settings,
-    get_route_sort_order,
-    save_route_sort_order,
-    ROUTE_COLOR_PRESETS,
 )
 
 
@@ -94,6 +67,8 @@ class AddressExtractWorker(QObject):
         self._path = pdf_path
 
     def run(self) -> None:
+        # Lazy import to avoid loading pdfplumber/pandas at startup
+        from utils import extract_pdf_data, validate_address_columns
         try:
             df, err = extract_pdf_data(self._path)
             if err:
@@ -121,6 +96,8 @@ class RouteLoadWorker(QObject):
         self._path = path
 
     def run(self) -> None:
+        # Lazy import to avoid loading pandas at startup
+        from utils import load_route_data
         df, err = load_route_data(self._path)
         self.finished.emit(df, err or "")
 
@@ -440,6 +417,8 @@ class Dashboard(QMainWindow):
         if self._address_data is None:
             self.log("No address data to save.", "error")
             return
+        # Lazy import to avoid loading pandas/openpyxl at startup
+        from utils import export_address_to_csv
         path, _ = QFileDialog.getSaveFileName(
             self, "Save Address CSV",
             str(Path(AppConfig.DEFAULT_EXPORT_DIR) / "address_export.csv"),
@@ -456,6 +435,8 @@ class Dashboard(QMainWindow):
         if self._address_data is None:
             self.log("No address data to save.", "error")
             return
+        # Lazy import to avoid loading pandas/openpyxl at startup
+        from utils import export_address_to_excel
         path, _ = QFileDialog.getSaveFileName(
             self, "Save Address Excel",
             str(Path(AppConfig.DEFAULT_EXPORT_DIR) / "address_export.xlsx"),
@@ -472,6 +453,8 @@ class Dashboard(QMainWindow):
         if self._route_data is None:
             self.log("No route data to save.", "error")
             return
+        # Lazy import to avoid loading pandas/openpyxl at startup
+        from utils import export_route_to_csv
         path, _ = QFileDialog.getSaveFileName(
             self, "Save Route CSV",
             str(Path(AppConfig.DEFAULT_EXPORT_DIR) / "route_export.csv"),
@@ -488,6 +471,8 @@ class Dashboard(QMainWindow):
         if self._route_data is None:
             self.log("No route data to save.", "error")
             return
+        # Lazy import to avoid loading pandas/openpyxl at startup
+        from utils import export_route_to_excel
         path, _ = QFileDialog.getSaveFileName(
             self, "Save Route Excel",
             str(Path(AppConfig.DEFAULT_EXPORT_DIR) / "route_export.xlsx"),
@@ -502,16 +487,22 @@ class Dashboard(QMainWindow):
 
     def _on_show_customer_map(self) -> None:
         self.log("Opening Customer List on Map...", "info")
+        # Lazy import to avoid loading heavy dependencies (pandas, QtWebEngine) at startup
+        from customer_map_window import CustomerListMapWindow
         win = CustomerListMapWindow(self._address_data, self, log_fn=self.log)
         win.show()
 
     def _on_show_routes_map(self) -> None:
         self.log("Opening Routes on Map...", "info")
+        # Lazy import to avoid loading heavy dependencies (pandas, QtWebEngine) at startup
+        from routes_map_window import RoutesMapWindow
         win = RoutesMapWindow(self._route_data, self, log_fn=self.log)
         win.show()
 
     def _on_edit_rules(self) -> None:
         self.log("Opening Route Rules Editor...", "info")
+        # Lazy import to avoid loading heavy dependencies at startup
+        from rule_editor_window import RuleEditorWindow
         win = RuleEditorWindow(self, log_fn=self.log)
         win.show()
 
@@ -522,208 +513,14 @@ class Dashboard(QMainWindow):
             self._on_settings()
             return
         self.log("Opening Routines...", "info")
+        # Lazy import to avoid loading heavy dependencies at startup
+        from routines import RoutinesWindow
         win = RoutinesWindow(self, log_fn=self.log)
         win.show()
 
-    def _on_clear_geocache(self, parent: QWidget) -> None:
-        """Delete all cached address data after confirmation."""
-        if (
-            QMessageBox.question(
-                parent,
-                "Delete cached data",
-                "Delete all cached address data? Addresses will be re-geocoded when you next open a map.",
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                QMessageBox.StandardButton.No,
-            )
-            != QMessageBox.StandardButton.Yes
-        ):
-            return
-        count = clear_geocache()
-        QMessageBox.information(parent, "Deleted", f"Deleted {count} cached address entries.")
-        self.log(f"Cached address data cleared ({count} entries).", "info")
-
     def _on_settings(self) -> None:
-        """Open Settings dialog (default address, location name, route colors, etc.)."""
-        dlg = QDialog(self)
-        dlg.setWindowTitle("Settings")
-        dlg.setMinimumWidth(480)
-        layout = QVBoxLayout(dlg)
-
-        layout.addWidget(QLabel("Default address for route visits with no address:"))
-        addr_edit = QLineEdit()
-        addr_edit.setText(get_default_route_address())
-        addr_edit.setPlaceholderText("e.g. Angereds Torg 5, 42465 Angered")
-        layout.addWidget(addr_edit)
-
-        layout.addWidget(QLabel("Display name for default location (Kontor, office, etc.):"))
-        name_edit = QLineEdit()
-        name_edit.setText(get_default_location_name())
-        name_edit.setPlaceholderText("e.g. Kontor")
-        layout.addWidget(name_edit)
-
-        routines_row = QHBoxLayout()
-        routines_row.addWidget(QLabel("Routines folder (markdown files):"))
-        routines_edit = QLineEdit()
-        routines_edit.setText(get_routines_folder())
-        routines_edit.setPlaceholderText("e.g. C:\\Users\\Me\\Routines")
-        routines_row.addWidget(routines_edit)
-        btn_browse_routines = QPushButton("Browse")
-        btn_browse_routines.clicked.connect(lambda: _browse_routines_folder(routines_edit))
-        routines_row.addWidget(btn_browse_routines)
-        layout.addLayout(routines_row)
-
-        # Break / schedule settings for route trip splitting (morning, afternoon, evening)
-        break_group = QGroupBox("Schedule breaks (for route trips)")
-        break_layout = QVBoxLayout(break_group)
-        break_layout.addWidget(
-            QLabel("Break names in schedule (semicolon-separated, case insensitive):")
-        )
-        break_names_edit = QLineEdit()
-        break_names_edit.setText("; ".join(get_break_names()))
-        break_names_edit.setPlaceholderText("e.g. RAST; RAST + 10 adm")
-        break_layout.addWidget(break_names_edit)
-        break_layout.addWidget(
-            QLabel("Lunch break (HH:MM-HH:MM):")
-        )
-        lunch_edit = QLineEdit()
-        lunch_start, lunch_end = get_break_lunch_window()
-        lunch_edit.setText(f"{lunch_start.strftime('%H:%M')}-{lunch_end.strftime('%H:%M')}")
-        lunch_edit.setPlaceholderText("e.g. 10:00-14:00")
-        break_layout.addWidget(lunch_edit)
-        break_layout.addWidget(
-            QLabel("Evening break (HH:MM-HH:MM):")
-        )
-        evening_edit = QLineEdit()
-        evening_start, evening_end = get_break_evening_window()
-        evening_edit.setText(f"{evening_start.strftime('%H:%M')}-{evening_end.strftime('%H:%M')}")
-        evening_edit.setPlaceholderText("e.g. 15:00-19:00")
-        break_layout.addWidget(evening_edit)
-        layout.addWidget(break_group)
-
-        # Route sort order
-        sort_group = QGroupBox("Route sorting")
-        sort_layout = QVBoxLayout(sort_group)
-        sort_layout.addWidget(QLabel("Sort routes by:"))
-        sort_combo = QComboBox()
-        sort_combo.addItem("Name", "name")
-        sort_combo.addItem("First trip type (morning/afternoon/evening, then by name)", "time")
-        sort_order = get_route_sort_order()
-        idx = sort_combo.findData(sort_order)
-        if idx >= 0:
-            sort_combo.setCurrentIndex(idx)
-        sort_layout.addWidget(sort_combo)
-        layout.addWidget(sort_group)
-
-        # Route color rules
-        color_group = QGroupBox("Route colors")
-        color_layout = QVBoxLayout(color_group)
-        color_layout.addWidget(QLabel("Use color if route name contains (first match wins):"))
-        rules_widget = QWidget()
-        rules_layout = QVBoxLayout(rules_widget)
-        rules_layout.setContentsMargins(0, 0, 0, 0)
-        rule_rows = []
-
-        def add_rule_row(rule=None):
-            row = QFrame()
-            row_layout = QHBoxLayout(row)
-            row_layout.setContentsMargins(0, 2, 0, 2)
-            color_combo = QComboBox()
-            for preset_name, hex_val in ROUTE_COLOR_PRESETS:
-                color_combo.addItem(preset_name, hex_val)
-            color_combo.setMinimumWidth(120)
-            contains_edit = QLineEdit()
-            contains_edit.setPlaceholderText("e.g. A, B, Nord")
-            contains_edit.setMinimumWidth(140)
-            remove_btn = QPushButton("Remove")
-            remove_btn.setFlat(True)
-            remove_btn.setStyleSheet("font-size: 9pt; padding: 2px 6px;")
-            if rule:
-                rule_color = (rule.get("color") or "").strip()
-                found = False
-                for i in range(color_combo.count()):
-                    if (color_combo.itemData(i) or "").lower() == rule_color.lower():
-                        color_combo.setCurrentIndex(i)
-                        found = True
-                        break
-                if not found and rule_color:
-                    color_combo.addItem(rule_color, rule_color)
-                    color_combo.setCurrentIndex(color_combo.count() - 1)
-                contains_edit.setText(rule.get("contains", ""))
-            row_layout.addWidget(QLabel("Use"))
-            row_layout.addWidget(color_combo)
-            row_layout.addWidget(QLabel("if route name contains:"))
-            row_layout.addWidget(contains_edit)
-            row_layout.addWidget(remove_btn)
-            row_layout.addStretch()
-
-            def remove_row():
-                rules_layout.removeWidget(row)
-                row.deleteLater()
-                rule_rows.remove((row, color_combo, contains_edit))
-
-            remove_btn.clicked.connect(remove_row)
-            rules_layout.addWidget(row)
-            rule_rows.append((row, color_combo, contains_edit))
-
-        for rule in get_route_color_rules():
-            add_rule_row(rule)
-        if not rule_rows:
-            add_rule_row()
-
-        add_btn = QPushButton("Add rule")
-        add_btn.setFlat(True)
-        add_btn.clicked.connect(lambda: add_rule_row())
-        rules_layout.addWidget(add_btn)
-
-        scroll_content = QWidget()
-        scroll_content_layout = QVBoxLayout(scroll_content)
-        scroll_content_layout.setContentsMargins(0, 0, 0, 0)
-        scroll_content_layout.addWidget(rules_widget)  # no stretch - stays compact
-        scroll_content_layout.addStretch(1)  # extra space goes here, not between rows
-
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setWidget(scroll_content)
-        scroll.setMinimumHeight(120)
-        color_layout.addWidget(scroll, 1)  # stretch=1 so list grows when window grows
-        layout.addWidget(color_group, 1)  # stretch=1 so group (and scroll) grows when dialog grows
-
-        # Delete cached address data (geocache)
-        data_group = QGroupBox("Data")
-        data_layout = QVBoxLayout(data_group)
-        data_layout.addWidget(QLabel("Cached geocoded addresses are stored locally. Delete to remove all cached data."))
-        btn_clear_geocache = QPushButton("Delete cached address data")
-        btn_clear_geocache.clicked.connect(lambda: self._on_clear_geocache(dlg))
-        data_layout.addWidget(btn_clear_geocache)
-        layout.addWidget(data_group)
-
-        btns = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
-        )
-        btns.accepted.connect(dlg.accept)
-        btns.rejected.connect(dlg.reject)
-        layout.addWidget(btns)
-
-        if dlg.exec() == QDialog.DialogCode.Accepted:
-            updates = {}
-            if addr_edit.text().strip():
-                updates["default_route_address"] = addr_edit.text().strip()
-            if name_edit.text().strip():
-                updates["default_location_name"] = name_edit.text().strip()
-            if updates:
-                save_config_updates(updates)
-            save_routines_folder(routines_edit.text().strip())
-            save_break_settings(
-                break_names_edit.text().strip() or "RAST",
-                lunch_edit.text().strip() or "10:00-14:00",
-                evening_edit.text().strip() or "15:00-19:00",
-            )
-            save_route_sort_order(sort_combo.currentData() or "time")
-            rules = []
-            for _, color_combo, contains_edit in rule_rows:
-                contains = contains_edit.text().strip()
-                if contains:
-                    color = color_combo.currentData() or "#777777"
-                    rules.append({"color": color, "contains": contains})
-            save_route_color_rules(rules)
-            self.log("Settings saved.", "success")
+        """Open Settings dialog."""
+        # Lazy import to avoid loading heavy dependencies at startup
+        from settings_dialog import SettingsDialog
+        dlg = SettingsDialog(self, log_fn=self.log)
+        dlg.exec()
